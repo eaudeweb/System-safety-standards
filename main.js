@@ -2,11 +2,11 @@
 const spreadsheetId = '1H4LeCBrDhiO8SRmMaZVDFPft7TnZik89N11Qdwnr1Ic';
 const marketSectorsLength = 9;
 const lifeCycleStagesLength = 5;
-const allValues = 'Settings!A4:T';
-const allHeaders = 'A1:F1';
-const allLabelHeaders = 'G1:P1';
-const allMarketSectorsLabels = 'G2:O2';
-const allLifeCycleStagesLabels = 'P2:T2';
+const allValues = 'Settings!A4:U';
+const allHeaders = 'A1:G1';
+const allLabelHeaders = 'H1:Q1';
+const allMarketSectorsLabels = 'H2:P2';
+const allLifeCycleStagesLabels = 'Q2:U2';
 const ranges = [allValues, allHeaders, allMarketSectorsLabels, allLifeCycleStagesLabels, allLabelHeaders];
 
 const CLIENT_ID = '793477745752-ehum9vcq1tcgp39enncrik52rif591u3.apps.googleusercontent.com';
@@ -35,6 +35,8 @@ var app2 = new Vue({
       totalRows: null,
       selectedLabel1: null,
       selectedLabel2: null,
+      selectedType: null,
+      standardTypes: [],
       pageOptions: [5, 10, 15],
       filter: null,
     }
@@ -49,6 +51,11 @@ var app2 = new Vue({
       result = 
       !!this.selectedLabel2 ? result.filter((item) => {
         return item[this.labelNames[1]].indexOf(this.selectedLabel2) > -1;
+      }) : result;
+
+      result = 
+      !!this.selectedType ? result.filter((item) => {
+        return item['Type'] === this.selectedType;
       }) : result;
 
       return result;
@@ -144,6 +151,7 @@ var app2 = new Vue({
       this.formatHeaders(headers, labelHeaders);
       this.formatLabels(labelHeaders, marketSectors, lifeCycleStages);
       this.formatValues(values);
+      this.formatStandardTypes(values);
     },
 
     formatHeaders(headers, labelHeaders) {
@@ -188,17 +196,27 @@ var app2 = new Vue({
       this.items = items.slice();
       this.totalRows = this.items.length;
     },
+    formatStandardTypes(values) {
+      const result = [];
+
+      values.map((row) => {
+        const stdType = row[6];
+        result.indexOf(stdType) === -1 ? result.push(stdType) : null;
+      });
+
+      this.standardTypes = result.slice();
+    },
     addLabels(headerName, row, indexLabel) {
       let result = [];
 
       indexLabel === 6
         ?
           this.labels[headerName].map((label, index) => {
-            !!row[6 + index] ? result.push(label) : null;
+            !!row[7 + index] ? result.push(label) : null;
           })
         :
           this.labels[headerName].map((label, index) => {
-            !!row[15 + index] ? result.push(label) : null;
+            !!row[16 + index] ? result.push(label) : null;
           })
 
       return result;

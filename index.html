@@ -52,7 +52,7 @@
       </b-row>
 
       <b-row>
-        <b-col md="6" class="my-1">
+        <b-col md="4" class="my-1">
           <b-form-group horizontal label="Filter by " class="mb-0">
             <b-form-select v-model="selectedLabel1">
               <option :value="null" selected>{{labelNames[0]}}</option>
@@ -60,11 +60,19 @@
             </b-form-select>
           </b-form-group>
         </b-col>
-        <b-col md="6" class="my-1">
+        <b-col md="4" class="my-1">
           <b-form-group horizontal label="Filter by " class="mb-0">
             <b-form-select v-model="selectedLabel2" />
               <option :value="null" selected>{{labelNames[1]}}</option>
               <option v-for="item in labels[labelNames[1]]" :value="item">{{item}}</option>
+            </b-form-select>
+          </b-form-group>
+        </b-col>
+        <b-col md="4" class="my-1">
+          <b-form-group horizontal label="Filter by " class="mb-0">
+            <b-form-select v-model="selectedType" />
+              <option :value="null" selected>Standard Type</option>
+              <option v-for="item in standardTypes" :value="item">{{item}}</option>
             </b-form-select>
           </b-form-group>
         </b-col>
