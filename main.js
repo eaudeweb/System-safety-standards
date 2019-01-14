@@ -459,7 +459,7 @@ function showInfo(data, tabletop) {
       }
     },
     computed: {
-      filteredItems: function makefilterItems() {
+      filteredItems: function filterItems() {
         let result = 
         !!this.selectedLabel1 ? this.items.filter((item) => {
           return item[this.labelNames[0]].indexOf(this.selectedLabel1) > -1;
@@ -475,6 +475,30 @@ function showInfo(data, tabletop) {
           return item['Type'] === this.selectedType;
         }) : result;
   
+        return result;
+      },
+      filteredLabels: function filterLabels() {
+        let result = {};
+        
+        if(!this.selectedLabel1 && !this.selectedLabel2 && !this.selectedType) {
+          result = this.labels;
+          result['standardTypes'] = this.standardTypes;
+        } else {          
+          result[this.labelNames[0]] = [];
+          result[this.labelNames[1]] = [];
+          result['standardTypes'] = [];
+          
+          this.filteredItems.map((item) => {
+            item[this.labelNames[0]].map((label) => {
+              result[this.labelNames[0]].indexOf(label) === -1 ? result[this.labelNames[0]].push(label) : null;
+            });
+            item[this.labelNames[1]].map((label) => {
+              result[this.labelNames[1]].indexOf(label) === -1 ? result[this.labelNames[1]].push(label) : null;
+            });
+            result['standardTypes'].indexOf(item.Type) === -1 ? result['standardTypes'].push(item.Type) : null;
+          });
+        }
+        
         return result;
       }
     },
