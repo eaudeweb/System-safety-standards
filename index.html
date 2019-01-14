@@ -7,6 +7,7 @@
   <!-- Add this to <head> -->
   <link type="text/css" rel="stylesheet" href="//unpkg.com/bootstrap/dist/css/bootstrap.min.css" />
   <link type="text/css" rel="stylesheet" href="//unpkg.com/bootstrap-vue@latest/dist/bootstrap-vue.css" />
+  <link type="text/css" rel="stylesheet" href="style.css" />
 
   <script src="https://unpkg.com/vue"></script>
 
@@ -19,7 +20,7 @@
 <body>
 
   <!-- Vue app -->
-  <div id="app">
+  <div id="app" v-cloak>
   
     <!-- Table -->
     <b-container fluid>
@@ -112,7 +113,7 @@
 
   </div>
 
-  <script src="main1.js"></script>
+  <script src="main.js"></script>
 </body>
 
 </html>
