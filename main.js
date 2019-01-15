@@ -436,6 +436,7 @@
 
 var numberOfLinesOfHeaders = 2;
 var publicSpreadsheetUrl = 'https://docs.google.com/spreadsheets/d/1H4LeCBrDhiO8SRmMaZVDFPft7TnZik89N11Qdwnr1Ic/pubhtml';
+var publicSpreadsheetUrlExportXlsx = 'https://docs.google.com/spreadsheets/d/1H4LeCBrDhiO8SRmMaZVDFPft7TnZik89N11Qdwnr1Ic/export?gid=0&format=xlsx';
 var typeColumnName = 'Type';
 var numberOfSortableHeaders = 3;
 
@@ -467,6 +468,7 @@ function showInfo(data, tabletop) {
         pageOptions: [50, 100, 150],
         filter: null,
         publicSpreadsheetUrl: publicSpreadsheetUrl,
+        publicSpreadsheetUrlExportXlsx: publicSpreadsheetUrlExportXlsx,
       }
     },
     computed: {

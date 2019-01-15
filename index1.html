@@ -1,0 +1,288 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+  <title>System safety standards</title>
+  <meta charset="utf-8" />
+  <!-- Add this to <head> -->
+  <link type="text/css" rel="stylesheet" href="//unpkg.com/bootstrap/dist/css/bootstrap.min.css" />
+  <link type="text/css" rel="stylesheet" href="//unpkg.com/bootstrap-vue@latest/dist/bootstrap-vue.css" />
+  <link type="text/css" rel="stylesheet" href="style.css" />
+
+  <script src="https://unpkg.com/vue"></script>
+
+  <!-- Add this after vue.js -->
+  <script src="//unpkg.com/babel-polyfill@latest/dist/polyfill.min.js"></script>
+  <script src="//unpkg.com/bootstrap-vue@latest/dist/bootstrap-vue.js"></script>
+
+</head>
+
+<body>
+
+  <!-- Vue app -->
+  <div id="app" v-cloak>
+
+
+    <div>
+      <div class="container-fluid">
+        <div class="row flex-xl-nowrap2">
+          <div class="pb-md-3 pl-md-5 bd-content col-md-9 col-xl-8 col-12">
+            <div class="container">
+              <div class="bd-content">
+
+                <h2 id="complete-example">Complete Example</h2>
+                <div class="bd-example vue-example vue-example-table-complete-1">
+                  <div class="container-fluid">
+                    <div class="row">
+                      <div class="my-1 col-md-6">
+                        <fieldset id="__BVID__125" role="group" aria-labelledby="__BVID__125__BV_label_" class="mb-0 b-form-group form-group">
+                          <div class="form-row">
+                            <legend id="__BVID__125__BV_label_" class="col-sm-3 col-form-label">Filter</legend>
+                            <div role="group" aria-labelledby="__BVID__125__BV_label_" class="col-sm-9">
+                              <div role="group" class="input-group"><input id="__BVID__126" type="text" placeholder="Type to Search"
+                                  class="form-control">
+                                <div class="input-group-append"><button type="button" disabled="disabled" class="btn btn-secondary disabled">Clear</button></div>
+                              </div>
+                              <!---->
+                              <!---->
+                              <!---->
+                            </div>
+                          </div>
+                        </fieldset>
+                      </div>
+                      <div class="my-1 col-md-6">
+                        <fieldset id="__BVID__127" role="group" aria-labelledby="__BVID__127__BV_label_" class="mb-0 b-form-group form-group">
+                          <div class="form-row">
+                            <legend id="__BVID__127__BV_label_" class="col-sm-3 col-form-label">Sort</legend>
+                            <div role="group" aria-labelledby="__BVID__127__BV_label_" class="col-sm-9">
+                              <div role="group" class="input-group"><select id="__BVID__128" class="form-control custom-select">
+                                  <option value="">-- none --</option>
+                                  <option value="name">Person Full name</option>
+                                  <option value="age">Person age</option>
+                                </select>
+                                <div class="input-group-append"><select id="__BVID__129" disabled="disabled" class="form-control custom-select">
+                                    <option value="false">Asc</option>
+                                    <option value="true">Desc</option>
+                                  </select></div>
+                              </div>
+                              <!---->
+                              <!---->
+                              <!---->
+                            </div>
+                          </div>
+                        </fieldset>
+                      </div>
+                      <div class="my-1 col-md-6">
+                        <fieldset id="__BVID__130" role="group" aria-labelledby="__BVID__130__BV_label_" class="mb-0 b-form-group form-group">
+                          <div class="form-row">
+                            <legend id="__BVID__130__BV_label_" class="col-sm-3 col-form-label">Sort direction</legend>
+                            <div role="group" aria-labelledby="__BVID__130__BV_label_" class="col-sm-9">
+                              <div role="group" class="input-group">
+                                <div class="input-group-append"><select id="__BVID__131" class="form-control custom-select">
+                                    <option value="asc">Asc</option>
+                                    <option value="desc">Desc</option>
+                                    <option value="last">Last</option>
+                                  </select></div>
+                              </div>
+                              <!---->
+                              <!---->
+                              <!---->
+                            </div>
+                          </div>
+                        </fieldset>
+                      </div>
+                      <div class="my-1 col-md-6">
+                        <fieldset id="__BVID__132" role="group" aria-labelledby="__BVID__132__BV_label_" class="mb-0 b-form-group form-group">
+                          <div class="form-row">
+                            <legend id="__BVID__132__BV_label_" class="col-sm-3 col-form-label">Per page</legend>
+                            <div role="group" aria-labelledby="__BVID__132__BV_label_" class="col-sm-9"><select id="__BVID__133"
+                                class="form-control custom-select">
+                                <option value="5">5</option>
+                                <option value="10">10</option>
+                                <option value="15">15</option>
+                              </select>
+                              <!---->
+                              <!---->
+                              <!---->
+                            </div>
+                          </div>
+                        </fieldset>
+                      </div>
+                    </div>
+                    <table id="__BVID__134" role="table" aria-busy="false" aria-colcount="4" aria-rowcount="12" class="table b-table b-table-stacked-md">
+                      <!---->
+                      <!---->
+                      <thead class="">
+                        <tr>
+                          <th tabindex="0" aria-colindex="1" aria-label="Click to sort Descending" class="sorting">Person
+                            Full name</th>
+                          <th tabindex="0" aria-colindex="2" aria-label="Click to sort Descending" class="sorting text-center">Person
+                            age</th>
+                          <th aria-colindex="3" class="">is Active</th>
+                          <th aria-colindex="4" class="">Actions</th>
+                        </tr>
+                      </thead>
+                      <!---->
+                      <tbody role="rowgroup" class="">
+                        <!---->
+                        <tr aria-rowindex="1" role="row" class="">
+                          <td aria-colindex="1" data-label="Person Full name" role="cell" class="">
+                            <div>Dickerson Macdonald</div>
+                          </td>
+                          <td aria-colindex="2" data-label="Person age" role="cell" class="text-center">
+                            <div>40</div>
+                          </td>
+                          <td aria-colindex="3" data-label="is Active" role="cell" class="">
+                            <div>Yes :)</div>
+                          </td>
+                          <td aria-colindex="4" data-label="Actions" role="cell" class="">
+                            <div><button type="button" class="btn mr-1 btn-secondary btn-sm">
+                                Info modal
+                              </button> <button type="button" class="btn btn-secondary btn-sm">
+                                Show Details
+                              </button></div>
+                          </td>
+                        </tr>
+                        <!---->
+                        <tr aria-rowindex="2" role="row" class="">
+                          <td aria-colindex="1" data-label="Person Full name" role="cell" class="">
+                            <div>Larsen Shaw</div>
+                          </td>
+                          <td aria-colindex="2" data-label="Person age" role="cell" class="text-center">
+                            <div>21</div>
+                          </td>
+                          <td aria-colindex="3" data-label="is Active" role="cell" class="">
+                            <div>No :(</div>
+                          </td>
+                          <td aria-colindex="4" data-label="Actions" role="cell" class="">
+                            <div><button type="button" class="btn mr-1 btn-secondary btn-sm">
+                                Info modal
+                              </button> <button type="button" class="btn btn-secondary btn-sm">
+                                Show Details
+                              </button></div>
+                          </td>
+                        </tr>
+                        <!---->
+                        <tr aria-rowindex="3" role="row" class="table-success">
+                          <td aria-colindex="1" data-label="Person Full name" role="cell" class="">
+                            <div>Mini Navarro</div>
+                          </td>
+                          <td aria-colindex="2" data-label="Person age" role="cell" class="text-center">
+                            <div>9</div>
+                          </td>
+                          <td aria-colindex="3" data-label="is Active" role="cell" class="">
+                            <div>No :(</div>
+                          </td>
+                          <td aria-colindex="4" data-label="Actions" role="cell" class="">
+                            <div><button type="button" class="btn mr-1 btn-secondary btn-sm">
+                                Info modal
+                              </button> <button type="button" class="btn btn-secondary btn-sm">
+                                Show Details
+                              </button></div>
+                          </td>
+                        </tr>
+                        <!---->
+                        <tr aria-rowindex="4" role="row" class="">
+                          <td aria-colindex="1" data-label="Person Full name" role="cell" class="">
+                            <div>Geneva Wilson</div>
+                          </td>
+                          <td aria-colindex="2" data-label="Person age" role="cell" class="text-center">
+                            <div>89</div>
+                          </td>
+                          <td aria-colindex="3" data-label="is Active" role="cell" class="">
+                            <div>No :(</div>
+                          </td>
+                          <td aria-colindex="4" data-label="Actions" role="cell" class="">
+                            <div><button type="button" class="btn mr-1 btn-secondary btn-sm">
+                                Info modal
+                              </button> <button type="button" class="btn btn-secondary btn-sm">
+                                Show Details
+                              </button></div>
+                          </td>
+                        </tr>
+                        <!---->
+                        <tr aria-rowindex="5" role="row" class="">
+                          <td aria-colindex="1" data-label="Person Full name" role="cell" class="">
+                            <div>Jami Carney</div>
+                          </td>
+                          <td aria-colindex="2" data-label="Person age" role="cell" class="text-center">
+                            <div>38</div>
+                          </td>
+                          <td aria-colindex="3" data-label="is Active" role="cell" class="">
+                            <div>Yes :)</div>
+                          </td>
+                          <td aria-colindex="4" data-label="Actions" role="cell" class="">
+                            <div><button type="button" class="btn mr-1 btn-secondary btn-sm">
+                                Info modal
+                              </button> <button type="button" class="btn btn-secondary btn-sm">
+                                Show Details
+                              </button></div>
+                          </td>
+                        </tr>
+                        <!---->
+                        <!---->
+                        <!---->
+                      </tbody>
+                    </table>
+                    <div class="row">
+                      <div class="my-1 col-md-6">
+                        <ul role="menubar" aria-disabled="false" aria-label="Pagination" class="my-0 pagination b-pagination pagination-md">
+                          <li role="none presentation" aria-hidden="true" class="page-item disabled"><span class="page-link">«</span></li>
+                          <li role="none presentation" aria-hidden="true" class="page-item disabled"><span class="page-link">‹</span></li>
+                          <!---->
+                          <li role="none presentation" class="page-item active"><a role="menuitemradio" tabindex="0"
+                              aria-label="Goto page 1" aria-checked="true" aria-posinset="1" aria-setsize="3" href="#"
+                              target="_self" class="page-link btn-primary">1</a></li>
+                          <li role="none presentation" class="page-item"><a role="menuitemradio" tabindex="-1"
+                              aria-label="Goto page 2" aria-checked="false" aria-posinset="2" aria-setsize="3" href="#"
+                              target="_self" class="page-link">2</a></li>
+                          <li role="none presentation" class="page-item"><a role="menuitemradio" tabindex="-1"
+                              aria-label="Goto page 3" aria-checked="false" aria-posinset="3" aria-setsize="3" href="#"
+                              target="_self" class="page-link">3</a></li>
+                          <!---->
+                          <li role="none presentation" class="page-item"><a role="menuitem" tabindex="-1" aria-label="Goto next page"
+                              href="#" target="_self" class="page-link"><span aria-hidden="true">›</span></a></li>
+                          <li role="none presentation" class="page-item"><a role="menuitem" tabindex="-1" aria-label="Goto last page"
+                              href="#" target="_self" class="page-link"><span aria-hidden="true">»</span></a></li>
+                        </ul>
+                      </div>
+                    </div>
+                    <div>
+                      <div id="modalInfo___BV_modal_outer_">
+                        <div id="modalInfo" role="dialog" aria-hidden="true" class="modal fade" style="display: none;">
+                          <div class="modal-dialog modal-md">
+                            <div tabindex="-1" role="document" aria-labelledby="modalInfo___BV_modal_header_"
+                              aria-describedby="modalInfo___BV_modal_body_" class="modal-content">
+                              <header id="modalInfo___BV_modal_header_" class="modal-header">
+                                <h5 class="modal-title"></h5><button type="button" aria-label="Close" class="close">×</button>
+                              </header>
+                              <div id="modalInfo___BV_modal_body_" class="modal-body">
+                                <pre></pre>
+                              </div>
+                              <footer id="modalInfo___BV_modal_footer_" class="modal-footer">
+                                <!----><button type="button" class="btn btn-primary">OK</button></footer>
+                            </div>
+                          </div>
+                        </div>
+                        <!---->
+                      </div>
+                    </div>
+                  </div>
+                </div>
+
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+
+
+
+  </div>
+
+  <script src="main.js"></script>
+</body>
+
+</html>

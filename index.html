@@ -4,6 +4,8 @@
 <head>
   <title>System safety standards</title>
   <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+
   <!-- Add this to <head> -->
   <link type="text/css" rel="stylesheet" href="//unpkg.com/bootstrap/dist/css/bootstrap.min.css" />
   <link type="text/css" rel="stylesheet" href="//unpkg.com/bootstrap-vue@latest/dist/bootstrap-vue.css" />
@@ -21,109 +23,104 @@
 
   <!-- Vue app -->
   <div id="app" v-cloak>
-  
-    <h1 class="text-center">System safety standards</h1>
-
-    <!-- Table -->
-    <b-container fluid>
-      <!-- User Interface controls -->
-      <b-row>
-        <b-col md="8" class="my-1">
-          <b-input-group prepend="Search">
-            <b-form-input v-model="filter"></b-form-input>
-          </b-input-group>
-        </b-col>
-
-        <b-col md="4" class="my-1">
-          <a class="btn mb-0 btn-outline-primary btn-md" style="float: right;" target="_blank" :href="publicSpreadsheetUrl">Export</a>
-          <b-button size="md" style="float: right;" @click="onResetFilters" variant="outline-primary" class="mb-0">
-            Reset filters
-          </b-button>
-        </b-col>
-      </b-row>
-
-      <b-row>
-        <b-col md="4" class="my-1">
-          <b-form-group horizontal :label="labelNames[0]" class="mb-0">
-            <b-form-select v-model="selectedLabel1">
-              <option :value="null" selected>All {{labelNames[0].toLowerCase()}}</option>
-              <option v-for="item in filteredLabels[labelNames[0]]" :value="item">{{item}}</option>
-            </b-form-select>
-          </b-form-group>
-        </b-col>
-        <b-col md="4" class="my-1">
-          <b-form-group horizontal :label="labelNames[1]" class="mb-0">
-            <b-form-select v-model="selectedLabel2" />
-            <option :value="null" selected>All {{labelNames[1].toLowerCase()}}</option>
-            <option v-for="item in filteredLabels[labelNames[1]]" :value="item">{{item}}</option>
-            </b-form-select>
-          </b-form-group>
-        </b-col>
-        <b-col md="4" class="my-1">
-          <b-form-group horizontal label="Type" class="mb-0">
-            <b-form-select v-model="selectedType" />
-            <option :value="null" selected>All types...</option>
-            <option v-for="item in filteredLabels.standardTypes" :value="item">{{item}}</option>
-            </b-form-select>
-          </b-form-group>
-        </b-col>
-      </b-row>
-
-      <!-- Main table element -->
-      <b-table show-empty stacked="md"
-        :items="filteredItems"
-        :fields="headers"
-        :current-page="currentPage"
-        :per-page="perPage"
-        :filter="filter"
-        @filtered="onFiltered"
-      >
-      <template slot="Specific committee" slot-scope="data">
-        <span v-html="data.value"></span>
-      </template>
-
-        <template :slot="labelNames[0]" slot-scope="row">
-          <b-badge
-            href="#"
-            v-for="(value, key) in row.item[labelNames[0]]"
-            @click="onFilterByLabel1(value)"
-            variant="success"
-          >{{ value }}</b-badge>
-        </template>
-        
-        <template :slot="labelNames[1]" slot-scope="row">
-          <b-badge
-            href="#"
-            v-for="(value, key) in row.item[labelNames[1]]"
-            @click="onFilterByLabel2(value)"
-            variant="primary"
-          >{{ value }}</b-badge>
-        </template>
-      </b-table>
+    <div class="container-fluid">
+      <div class="row flex-xl-nowrap2">
+        <div class="bd-content">
 
 
-      <b-row>
+          <h1 class="text-center">System safety standards</h1>
 
-        <b-col md="3" class="my-1">
-          <label class="mr-sm-2">Total results {{totalRows}}</label>
-        </b-col>
+          <!-- Table -->
+          <b-container fluid v-if="items && items.length > 0">
+            <!-- User Interface controls -->
+            <b-row>
+              <b-col md="8" class="my-1">
+                <b-input-group prepend="Search">
+                  <b-form-input v-model="filter"></b-form-input>
+                </b-input-group>
+              </b-col>
 
-        <b-col md="6" class="my-1 d-flex justify-content-center" >
-          <b-pagination :total-rows="totalRows" :per-page="perPage" v-model="currentPage" class="my-0" />
-        </b-col>
+              <b-col md="4" class="my-1">
+                <a class="btn mb-0 btn-outline-primary btn-md" style="float: right;" target="_blank" :href="publicSpreadsheetUrlExportXlsx">Export</a>
+                <b-button size="md" style="float: right;" @click="onResetFilters" variant="outline-primary" class="mb-0">
+                  Reset filters
+                </b-button>
+              </b-col>
+            </b-row>
 
-        <b-col md="3" class="my-1">
-          <b-input-group prepend="Page size">
-            <b-form-select class="mb-2 mr-sm-2 mb-sm-0"
-              :options="pageOptions" v-model="perPage">
-            </b-form-select>
-          </b-input-group>
-        </b-col>
+            <b-row>
+              <b-col md="4" class="my-1">
+                <b-form-group horizontal :label="labelNames[0]" class="mb-0">
+                  <b-form-select v-model="selectedLabel1">
+                    <option :value="null" selected>All {{labelNames[0].toLowerCase()}}</option>
+                    <option v-for="item in filteredLabels[labelNames[0]]" :value="item">{{item}}</option>
+                  </b-form-select>
+                </b-form-group>
+              </b-col>
+              <b-col md="4" class="my-1">
+                <b-form-group horizontal :label="labelNames[1]" class="mb-0">
+                  <b-form-select v-model="selectedLabel2" />
+                  <option :value="null" selected>All {{labelNames[1].toLowerCase()}}</option>
+                  <option v-for="item in filteredLabels[labelNames[1]]" :value="item">{{item}}</option>
+                  </b-form-select>
+                </b-form-group>
+              </b-col>
+              <b-col md="4" class="my-1">
+                <b-form-group horizontal label="Type" class="mb-0">
+                  <b-form-select v-model="selectedType" />
+                  <option :value="null" selected>All types...</option>
+                  <option v-for="item in filteredLabels.standardTypes" :value="item">{{item}}</option>
+                  </b-form-select>
+                </b-form-group>
+              </b-col>
+            </b-row>
 
-      </b-row>
+            <!-- Main table element -->
+            <b-table show-empty stacked="md" :items="filteredItems" :fields="headers" :current-page="currentPage"
+              :per-page="perPage" :filter="filter" @filtered="onFiltered">
+              <template slot="Specific committee" slot-scope="data">
+                <span v-html="data.value"></span>
+              </template>
 
-    </b-container>
+              <template :slot="labelNames[0]" slot-scope="row">
+                <b-badge href="#" v-for="(value, key) in row.item[labelNames[0]]" @click="onFilterByLabel1(value)"
+                  variant="success">{{
+                  value }}</b-badge>
+              </template>
 
+              <template :slot="labelNames[1]" slot-scope="row">
+                <b-badge href="#" v-for="(value, key) in row.item[labelNames[1]]" @click="onFilterByLabel2(value)"
+                  variant="primary">{{
+                  value }}</b-badge>
+              </template>
+            </b-table>
+
+
+            <b-row>
+
+              <b-col md="3" class="my-1">
+                <label class="mr-sm-2">Total results {{totalRows}}</label>
+              </b-col>
+
+              <b-col md="6" class="my-1 d-flex justify-content-center">
+                <b-pagination :total-rows="totalRows" :per-page="perPage" v-model="currentPage" class="my-0" />
+              </b-col>
+
+              <b-col md="3" class="my-1">
+                <b-input-group prepend="Page size">
+                  <b-form-select class="mb-2 mr-sm-2 mb-sm-0" :options="pageOptions" v-model="perPage">
+                  </b-form-select>
+                </b-input-group>
+              </b-col>
+
+            </b-row>
+
+          </b-container>
+
+        </div>
+
+      </div>
+    </div>
   </div>
 
   <script src="main.js"></script>
