@@ -320,16 +320,25 @@
 
       for (i = 0, ilen = data.length; i < ilen; i++) {
         var source = data[i];
-        var temElem = {};
-        
+        var tempElem = {};
+
         for (var key in source) {
           if (/^gsx/.test(key)) {
             var saneKeyName = key.replace('gsx$', '');
-            temElem[saneKeyName] = source[key].$t;
+            var itemValue = source[key].$t;
+
+            if(itemValue.indexOf('http') !== -1) {
+              var link = itemValue.substring(itemValue.indexOf('http'), itemValue.length).split(' ')[0];
+              var htmlLink = itemValue.replace(link, '<a target="_blank" href=" ' + link + '">' + link + '</a>');
+
+              tempElem[saneKeyName] = htmlLink;
+            } else {
+              tempElem[saneKeyName] = itemValue;
+            }
           }
         }
 
-        elements.push(temElem);
+        elements.push(tempElem);
       }
       return elements;
     },
@@ -428,6 +437,7 @@
 var numberOfLinesOfHeaders = 2;
 var publicSpreadsheetUrl = 'https://docs.google.com/spreadsheets/d/1H4LeCBrDhiO8SRmMaZVDFPft7TnZik89N11Qdwnr1Ic/pubhtml';
 var typeColumnName = 'Type';
+var numberOfSortableHeaders = 3;
 
 function init() {
   Tabletop.init({
@@ -456,6 +466,7 @@ function showInfo(data, tabletop) {
         standardTypes: [],
         pageOptions: [50, 100, 150],
         filter: null,
+        publicSpreadsheetUrl: publicSpreadsheetUrl,
       }
     },
     computed: {
@@ -464,17 +475,17 @@ function showInfo(data, tabletop) {
         !!this.selectedLabel1 ? this.items.filter((item) => {
           return item[this.labelNames[0]].indexOf(this.selectedLabel1) > -1;
         }) : this.items.slice();
-  
+
         result = 
         !!this.selectedLabel2 ? result.filter((item) => {
           return item[this.labelNames[1]].indexOf(this.selectedLabel2) > -1;
         }) : result;
-  
+
         result = 
         !!this.selectedType ? result.filter((item) => {
           return item['Type'] === this.selectedType;
         }) : result;
-  
+
         return result;
       },
       filteredLabels: function filterLabels() {
@@ -487,7 +498,7 @@ function showInfo(data, tabletop) {
           result[this.labelNames[0]] = [];
           result[this.labelNames[1]] = [];
           result['standardTypes'] = [];
-          
+
           this.filteredItems.map((item) => {
             item[this.labelNames[0]].map((label) => {
               result[this.labelNames[0]].indexOf(label) === -1 ? result[this.labelNames[0]].push(label) : null;
@@ -498,7 +509,7 @@ function showInfo(data, tabletop) {
             result['standardTypes'].indexOf(item.Type) === -1 ? result['standardTypes'].push(item.Type) : null;
           });
         }
-        
+
         return result;
       }
     },
@@ -529,9 +540,11 @@ function showInfo(data, tabletop) {
       },
       formatHeaders(columns) {
         let result = [];
+        let index = 0;
         columns.map((header) => {
-          const item = { key: header.name, label: header.name, sortable: true, sortDirection: 'desc' };
+          const item = { key: header.name, label: header.name, sortable: index <= numberOfSortableHeaders ? true : false, sortDirection: 'desc' };
           result.push(item);
+          index++;
         });
         this.headers = result.slice();
       },
