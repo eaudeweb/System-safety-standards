@@ -1,3 +1,12 @@
+/**
+ * This is a simplified version of Tabletop.js from https://github.com/jsoma/tabletop
+ * It presumes that there is only one sheet
+ * It needs the first row of the googlesheet to be empty so that it will have the correct headers
+ * It uses vuejs to make the necessary data for the boostrap-vue table
+ * It expects that on the second row of values (third from the top) will find subheaders which will be used as labels
+ * The first few columns will be sortable
+ * It looks for links (only containing http(s)) and adds the html tags (<a>) to be opened in a new tab
+ */
 (function () {
   'use strict';
 
@@ -438,7 +447,7 @@ var numberOfLinesOfHeaders = 2;
 var publicSpreadsheetUrl = 'https://docs.google.com/spreadsheets/d/1H4LeCBrDhiO8SRmMaZVDFPft7TnZik89N11Qdwnr1Ic/pubhtml';
 var publicSpreadsheetUrlExportXlsx = 'https://docs.google.com/spreadsheets/d/1H4LeCBrDhiO8SRmMaZVDFPft7TnZik89N11Qdwnr1Ic/export?gid=0&format=xlsx';
 var typeColumnName = 'Type';
-var numberOfSortableHeaders = 3;
+var numberOfSortableHeaders = 4;
 
 function init() {
   Tabletop.init({
