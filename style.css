@@ -9,4 +9,8 @@
 .table td, .table td * {
   word-break: break-word;
   white-space: normal;
+  font-size: 13px;
+}
+a.badge.badge-primary, .badge-success {
+  margin: 2px;
 }
