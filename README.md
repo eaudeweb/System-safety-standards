@@ -24,16 +24,16 @@
 * __id="app"__ is used by Vuejs
 * __data-publicSpreadsheetUrl__ the full address of the published google sheet
 * __data-publicSpreadsheetUrlExportXlsx__ the full address of the published google sheet with the desired termination used for download ex: `/export?gid=0&format=xlsx"` this will download as .xlsx
-* __data-typeColumnName="Type"__ we merged 3 tables into one by including a type of standard column, we use this column for filtering so that a user can see the content of a single tables if they choose. `If this name will change in the google sheet, it aslo has to changed here`
-* __data-numberOfSortableColumns="4"__ there isn't any information in the google sheet that will tell us which columns should be sortable, this way we consider the first few to be sortable, `so here the user sets the number, and in the google sheet, need to put them in the correct order from left to right`
-* __data-title__ the title to show in the widget
+* __data-typeColumnName="Type"__ we merged 3 tables into one by including a _type of standard_ column, we use this column for filtering, so that a user can see the content of a single table if they choose. `If this name will change in the google sheet, it aslo has to changed here`
+* __data-numberOfSortableColumns="4"__ there isn't any information in the google sheet that will tell us which columns should be sortable, this way we consider the first few to be sortable, `so here the user sets the number, and in the google sheet, they need to put the columns in the correct order from left to right`
+* __data-title__ the title to be shown in the widget
 
 2. a `<script>` that will load the javascript file that will process everything
 
         <script async src="main.js" charset="utf-8"></script>
 
-* src="main.js" this is the location of the script, it cal also be a full address especially if it is embedded by using this way and not by inserting a published version of the widget inside an `<iframe>`
-* inside the main.js there is a reference to a style.css file that will also need a full address of it
+* src="main.js" this is the location of the script, it can also be a full address especially if it is embedded this way, not by inserting a published version of the widget inside an `<iframe>`
+* inside the main.js there is a reference to a style.css file that will also need a full address for it
 
 ### It can also be deployed and inserted inside an `<iframe>`.
 
