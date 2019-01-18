@@ -11,11 +11,11 @@
   'use strict';
 
   var el = d.getElementById("app");
-  var numberOfLinesOfHeaders = el.getAttribute("data-numberOfLinesOfHeaders");
+  var numberOfLinesOfHeaders = 2;
   var publicSpreadsheetUrl = el.getAttribute("data-publicSpreadsheetUrl");
   var publicSpreadsheetUrlExportXlsx = el.getAttribute("data-publicSpreadsheetUrlExportXlsx");
   var typeColumnName = el.getAttribute("data-typeColumnName");
-  var numberOfSortableHeaders = el.getAttribute("data-numberOfSortableHeaders");
+  var numberOfSortableColumns = el.getAttribute("data-numberOfSortableColumns");
   var title = el.getAttribute("data-title");
   var scripts = ["https://unpkg.com/vue", "//unpkg.com/babel-polyfill@latest/dist/polyfill.min.js", "//unpkg.com/bootstrap-vue@latest/dist/bootstrap-vue.js"];
   var styles = ["//unpkg.com/bootstrap/dist/css/bootstrap.min.css", "//unpkg.com/bootstrap-vue@latest/dist/bootstrap-vue.css", "style.css"];
@@ -663,7 +663,7 @@
           var result = [];
           var index = 0;
           columns.map((header) => {
-            var item = { key: header.name, label: header.name, sortable: index <= numberOfSortableHeaders ? true : false, sortDirection: 'desc' };
+            var item = { key: header.name, label: header.name, sortable: index < numberOfSortableColumns ? true : false, sortDirection: 'desc' };
             result.push(item);
             index++;
           });
