@@ -84,7 +84,7 @@
             <!-- Main table element -->
             <b-table show-empty stacked="md" :items="filteredItems" :fields="headers" :current-page="currentPage"
               :per-page="perPage" :filter="filter" @filtered="onFiltered">
-              <template slot="Specific committee" slot-scope="data">
+              <template v-for="header in headers.slice(0, headers.length - 2)" :slot="header.label" slot-scope="data">
                 <span v-html="data.value"></span>
               </template>
 
@@ -455,21 +455,37 @@
           if (/^gsx/.test(key)) {
             var saneKeyName = key.replace('gsx$', '');
             var itemValue = source[key].$t;
+            var linkTagsText = '';
 
-            if (itemValue.indexOf('http') !== -1) {
-              var link = itemValue.substring(itemValue.indexOf('http'), itemValue.length).split(' ')[0];
-              var htmlLink = itemValue.replace(link, '<a target="_blank" href=" ' + link + '">' + link + '</a>');
+            linkTagsText = itemValue.indexOf('http') !== -1 ? this.handleLink(itemValue) : itemValue;
 
-              tempElem[saneKeyName] = htmlLink;
-            } else {
-              tempElem[saneKeyName] = itemValue;
-            }
+            tempElem[saneKeyName] = this.handleNewLine(linkTagsText);
           }
         }
 
         elements.push(tempElem);
       }
       return elements;
+    },
+
+    handleNewLine(testValue) {
+      var resultWithNewLineTags = testValue.match(/\n/) ? replaceNewLine(testValue) : testValue.match(/\r/) ? replaceNewLine(testValue) : testValue;
+
+      function replaceNewLine(itemValue) {
+        var lines = itemValue.split('\n');
+        var result = lines[0];
+        for (let index = 1; index < lines.length; index++) {
+          const element = lines[index];
+          result += '<br>' + element;
+        }
+        return result;
+      }
+      return resultWithNewLineTags;
+    },
+
+    handleLink(itemValue) {
+      var link = itemValue.substring(itemValue.indexOf('http'), itemValue.length).split(' ')[0];
+      return itemValue.replace(link, '<a target="_blank" href=" ' + link + '">' + link + '</a>');
     },
 
     /*
