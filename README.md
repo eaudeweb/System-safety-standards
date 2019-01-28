@@ -8,33 +8,32 @@
 
  ## How to embed
 
+`There is a folder named example where the index.html file shows the way it can be done, with out <iframe>`
 
 ### Using it as a widget without iframe:
 1. a `<div>` that will be the parent of the widget and will be used by Vuejs. It also has to be given some attributes to use in the app:
 
-        <div
-            id="app"
-            v-cloak
-            data-publicSpreadsheetUrl="https://docs.google.com/spreadsheets/d/1H4LeCBrDhiO8SRmMaZVDFPft7TnZik89N11Qdwnr1Ic/edit#gid=0"
-            data-publicSpreadsheetUrlExportXlsx="https://docs.google.com/spreadsheets/d/1H4LeCBrDhiO8SRmMaZVDFPft7TnZik89N11Qdwnr1Ic/export?gid=0&format=xlsx"
-            data-typeColumnName="Type"
-            data-numberOfSortableHeaders="4"
-            data-title="System safety standards"
-        ></div>
-* __id="app"__ is used by Vuejs
-* __data-publicSpreadsheetUrl__ the full address of the published google sheet
-* __data-publicSpreadsheetUrlExportXlsx__ the full address of the published google sheet with the desired termination used for download ex: `/export?gid=0&format=xlsx"` this will download as .xlsx
-* __data-typeColumnName="Type"__ we merged 3 tables into one by including a _type of standard_ column, we use this column for filtering, so that a user can see the content of a single table if they choose. `If this name will change in the google sheet, it aslo has to changed here`
-* __data-numberOfSortableColumns="4"__ there isn't any information in the google sheet that will tell us which columns should be sortable, this way we consider the first few to be sortable, `so here the user sets the number, and in the google sheet, they need to put the columns in the correct order from left to right`
-* __data-title__ the title to be shown in the widget
+        <gsheet-vue-widget
+          title="System safety standards"
+          spreadsheet-url="https://docs.google.com/spreadsheets/d/1H4LeCBrDhiO8SRmMaZVDFPft7TnZik89N11Qdwnr1Ic/edit?usp=sharing"
+          spreadsheet-url-export="https://docs.google.com/spreadsheets/d/1H4LeCBrDhiO8SRmMaZVDFPft7TnZik89N11Qdwnr1Ic/export?gid=0&format=xlsx"
+          type-column-name=Type
+          number-of-sortable-columns=4
+        ></gsheet-vue-widget>
 
-2. a `<script>` that will load the javascript file that will process everything
+* __title__ the title to be shown in the widget
+* __spreadsheet-url__ the full address of the published google sheet
+* __spreadsheet-url-export__ the full address of the published google sheet with the desired termination used for download ex: `/export?gid=0&format=xlsx"` this will download as .xlsx
+* __type-column-name="Type"__ we merged 3 tables into one by including a _type of standard_ column, we use this column for filtering, so that a user can see the content of a single table if they choose. `If this name will change in the google sheet, it aslo has to changed here`
+* __number-of-sortable-columns="4"__ there isn't any information in the google sheet that will tell us which columns should be sortable, this way we consider the first few to be sortable, `so here the user sets the number, and in the google sheet, they need to put the columns in the correct order from left to right`
 
-        <script async src="main.js" charset="utf-8"></script>
+2. a `<script>` that will load the javascript file that will process everything. It is a bundle of every file needed including vue, boostrap-vue etc
 
-* src="main.js" this is the location of the script, it can also be a full address especially if it is embedded this way, not by inserting a published version of the widget inside an `<iframe>`
-* inside the main.js there is a reference to a style.css file that will also need a full address for it
+        <script src=/js/app.824dcb6a.js></script>
 
+* src="app.824dcb6a.js" this is the location of the script, it should be a full address
+
+3. a `<style>` that will load all css needed for the table, bundled in one file
 ### It can also be deployed and inserted inside an `<iframe>`.
 
 ### Google Sheet use
