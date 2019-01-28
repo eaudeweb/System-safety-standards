@@ -8,7 +8,7 @@
 
  ## How to embed
 
-`There is a folder named docs where the index.html file shows the way it can be done, with out <iframe>`
+`There is a folder named docs where the index.html file shows the way it can be done, without <iframe>`
 
 ### Using it as a widget without iframe:
 1. a `<gsheet-vue-widget>` that will be the widget and will be used by Vuejs. It also has to be given some attributes to use in the app:
