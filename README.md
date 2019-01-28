@@ -11,7 +11,7 @@
 `There is a folder named example where the index.html file shows the way it can be done, with out <iframe>`
 
 ### Using it as a widget without iframe:
-1. a `<div>` that will be the parent of the widget and will be used by Vuejs. It also has to be given some attributes to use in the app:
+1. a `<gsheet-vue-widget>` that will be the widget and will be used by Vuejs. It also has to be given some attributes to use in the app:
 
         <gsheet-vue-widget
           title="System safety standards"
