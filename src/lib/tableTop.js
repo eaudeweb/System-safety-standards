@@ -326,7 +326,12 @@ Tabletop.prototype = {
           var itemValue = source[key].$t;
           var linkTagsText = '';
 
-          linkTagsText = itemValue.indexOf('http') !== -1 ? this.handleLink(itemValue) : itemValue;
+          linkTagsText = itemValue.indexOf('http') !==
+            -1 ?
+            this.handleLink(itemValue, 'http') :
+            itemValue.indexOf('www') !== -1 ?
+              this.handleLink(itemValue, 'www') :
+              itemValue;
 
           tempElem[saneKeyName] = this.handleNewLine(linkTagsText);
         }
@@ -352,9 +357,11 @@ Tabletop.prototype = {
     return resultWithNewLineTags;
   },
 
-  handleLink(itemValue) {
-    var link = itemValue.substring(itemValue.indexOf('http'), itemValue.length).split(' ')[0];
-    return itemValue.replace(link, '<a target="_blank" href=" ' + link + '">' + link + '</a>');
+  handleLink(itemValue, term) {
+    const link = itemValue.substring(itemValue.indexOf(term), itemValue.length).split(' ')[0];
+    const newlink = link.indexOf('http') > -1 ? link : `//${link}`;
+    const linkedText = `<a target="_blank" href="${newlink}">${link}</a>`;
+    return itemValue.replace(link, linkedText);
   },
 
   /*

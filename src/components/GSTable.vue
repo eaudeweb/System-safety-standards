@@ -6,7 +6,7 @@
       <b-row>
         <b-col md="8" class="my-1">
           <b-input-group prepend="Search">
-            <b-form-input v-model="filter"></b-form-input>
+            <b-form-input v-model="filter" placeholder="Search by key word, year, etc"></b-form-input>
           </b-input-group>
         </b-col>
 
@@ -28,23 +28,15 @@
       </b-row>
 
       <b-row>
-        <b-col md="4" class="my-1">
-          <b-form-group horizontal :label="labelNames[0]" class="mb-0">
-            <b-form-select v-model="selectedLabel1">
-              <option :value="null" selected>All {{labelNames[0].toLowerCase()}}</option>
-              <option v-for="item in filteredLabels[labelNames[0]]" :value="item">{{item}}</option>
+        <b-col md="3" class="my-1">
+          <b-form-group horizontal label="Coverage" class="mb-0">
+            <b-form-select v-model="selectedCoverage">
+              <option :value="null" selected>All coverages...</option>
+              <option v-for="item in filteredLabels.standardCoverages" :value="item">{{item}}</option>
             </b-form-select>
           </b-form-group>
         </b-col>
-        <b-col md="4" class="my-1">
-          <b-form-group horizontal :label="labelNames[1]" class="mb-0">
-            <b-form-select v-model="selectedLabel2">
-              <option :value="null" selected>All {{labelNames[1].toLowerCase()}}</option>
-              <option v-for="item in filteredLabels[labelNames[1]]" :value="item">{{item}}</option>
-            </b-form-select>
-          </b-form-group>
-        </b-col>
-        <b-col md="4" class="my-1">
+        <b-col md="3" class="my-1">
           <b-form-group horizontal label="Type" class="mb-0">
             <b-form-select v-model="selectedType">
               <option :value="null" selected>All types...</option>
@@ -52,12 +44,29 @@
             </b-form-select>
           </b-form-group>
         </b-col>
+        <b-col md="3" class="my-1">
+          <b-form-group horizontal :label="labelNames[0]" class="mb-0">
+            <b-form-select v-model="selectedLabel1">
+              <option :value="null" selected>All {{labelNames[0].toLowerCase()}}</option>
+              <option v-for="item in filteredLabels[labelNames[0]]" :value="item">{{item}}</option>
+            </b-form-select>
+          </b-form-group>
+        </b-col>
+        <b-col md="3" class="my-1">
+          <b-form-group horizontal :label="labelNames[1]" class="mb-0">
+            <b-form-select v-model="selectedLabel2">
+              <option :value="null" selected>All {{labelNames[1].toLowerCase()}}</option>
+              <option v-for="item in filteredLabels[labelNames[1]]" :value="item">{{item}}</option>
+            </b-form-select>
+          </b-form-group>
+        </b-col>
       </b-row>
 
       <!-- Main table element -->
       <b-table
+        responsive
         show-empty
-        stacked="md"
+        stacked="sm"
         :items="filteredItems"
         :fields="headers"
         :current-page="currentPage"
@@ -67,7 +76,7 @@
       >
         <template
           v-for="header in headers.slice(0, headers.length - 2)"
-          :slot="header.label"
+          :slot="header.displayName"
           slot-scope="data"
         >
           <span v-html="data.value"></span>
@@ -80,8 +89,7 @@
             @click="onFilterByLabel1(value)"
             variant="success"
           >
-            {{
-            value }}
+            {{ value }}
           </b-badge>
         </template>
 
@@ -92,8 +100,7 @@
             @click="onFilterByLabel2(value)"
             variant="primary"
           >
-            {{
-            value }}
+            {{ value }}
           </b-badge>
         </template>
       </b-table>
@@ -117,8 +124,14 @@
             <b-form-select class="mb-2 mr-sm-2 mb-sm-0" :options="pageOptions" v-model="perPage"></b-form-select>
           </b-input-group>
         </b-col>
+
+        <div class="footer-links" v-html="footnoteAbreviations">
+        </div>
+        <div id="bottom" class="footer-links" v-html="footerLinksStandardsOrganizations">
+        </div>
       </b-row>
     </b-container>
+
   </div>
 </template>
 
@@ -132,7 +145,13 @@ export default {
     "spreadsheetUrl",
     "spreadsheetUrlExport",
     "typeColumnName",
-    "numberOfSortableColumns"
+    "coverageColumnName",
+    "numberOfSortableColumns",
+    "invisibleColumns",
+    "footerLinksStandardsOrganizations",
+    "footnoteAbreviations",
+    "columnsWithFooters",
+    "columnsFooters"
   ],
   data() {
     return {
@@ -146,14 +165,21 @@ export default {
       selectedLabel1: null,
       selectedLabel2: null,
       selectedType: null,
+      selectedCoverage: null,
+      userFilters: [],
+      userFiltersSelections: [],
       standardTypes: [],
+      standardCoverages: [],
       pageOptions: [50, 100, 150],
-      filter: null
+      filter: null,
     };
   },
   computed: {
+    /**
+     * will return the filtered list after all filters have been applied
+     */
     filteredItems: function filterItems() {
-      var result = !!this.selectedLabel1
+      let result = !!this.selectedLabel1
         ? this.items.filter(item => {
             return item[this.labelNames[0]].indexOf(this.selectedLabel1) > -1;
           })
@@ -171,18 +197,26 @@ export default {
           })
         : result;
 
+      result = !!this.selectedCoverage
+        ? result.filter(item => {
+            return item["Coverage"] === this.selectedCoverage;
+          })
+        : result;
+
       return result;
     },
     filteredLabels: function filterLabels() {
-      var result = {};
+      let result = {};
 
-      if (!this.selectedLabel1 && !this.selectedLabel2 && !this.selectedType) {
+      if (!this.selectedLabel1 && !this.selectedLabel2 && !this.selectedType && !this.selectedCoverage) {
         result = this.labels;
         result["standardTypes"] = this.standardTypes;
+        result["standardCoverages"] = this.standardCoverages;
       } else {
         result[this.labelNames[0]] = [];
         result[this.labelNames[1]] = [];
         result["standardTypes"] = [];
+        result["standardCoverages"] = [];
 
         this.filteredItems.map(item => {
           item[this.labelNames[0]].map(label => {
@@ -197,6 +231,9 @@ export default {
           });
           result["standardTypes"].indexOf(item.Type) === -1
             ? result["standardTypes"].push(item.Type)
+            : null;
+          result["standardCoverages"].indexOf(item.Coverage) === -1
+            ? result["standardCoverages"].push(item.Coverage)
             : null;
         });
       }
@@ -213,11 +250,11 @@ export default {
   },
   methods: {
     formatSheetDataForTable(data) {
-      console.log(data);
       this.formatHeaders(data.columnNamesList);
       this.formatLabels(data.columnNamesList);
       this.formatValues(data.columnNamesList, data.elements);
-      this.formatStandardTypes(data.columnNamesList, data.elements);
+      this.standardTypes = this.formatStandardTypes(data.columnNamesList, data.elements, this.typeColumnName);
+      this.standardCoverages = this.formatStandardTypes(data.columnNamesList, data.elements, this.coverageColumnName);
     },
     onFiltered(filteredItems) {
       this.totalRows = filteredItems.length;
@@ -233,29 +270,57 @@ export default {
       this.selectedLabel1 = null;
       this.selectedLabel2 = null;
       this.selectedType = null;
+      this.selectedCoverage = null;
     },
     formatHeaders(columns) {
-      var result = [];
-      var index = 0;
+      let result = [];
+      const footerIndicators = "abcdefghijklmnopqrstuvwxyz";
+      let index = 0;
+      let footerIndicatorsIndex = 0;
+      let invisibleColumnsList = this.invisibleColumns.split(', ');
+
       columns.map(header => {
-        var item = {
-          key: header.name,
-          label: header.name,
-          sortable: index < this.numberOfSortableColumns ? true : false,
-          sortDirection: "desc"
-        };
-        result.push(item);
-        index++;
+        if(invisibleColumnsList.indexOf(header.name) === -1) {
+          let item = {
+            key: header.name,
+            label: addFooterIndication.call(this, header.name),
+            displayName: header.name,
+            // label: header.name,
+            sortable: index < this.numberOfSortableColumns ? true : false,
+            sortDirection: "desc"
+          };
+          result.push(item);
+          index++;
+        }
       });
       this.headers = result.slice();
+
+      function addFooterIndication(item) {
+        let result = item;
+        let columnsWithFootersList = this.columnsWithFooters.split(', ');
+        let columnsFootersList = this.columnsFooters.split('</span>');
+
+        if(columnsWithFootersList.indexOf(item) > -1) {
+          const footerNote = columnsFootersList.find(function(element) {
+            return element.indexOf(`id="${item}"`) > -1;
+          });
+          result = ` ${item}
+          <p class="tooltip-a"><sup> ${footerIndicators[footerIndicatorsIndex]}</sup>
+            ${footerNote}</span>
+          </p>
+          `;
+          footerIndicatorsIndex++;
+        }
+        return result;
+      }
     },
     formatLabels(columns) {
-      var result = {};
+      let result = {};
       columns.map(header => {
         header.subHeaders ? (result[header.name] = []) : null;
         if (header.subHeaders) {
           Object.keys(header.subHeaders).map(key => {
-            var subHeaderName = header.subHeaders[key];
+            let subHeaderName = header.subHeaders[key];
             result[header.name].push(subHeaderName);
           });
           this.labelNames.push(header.name);
@@ -264,9 +329,9 @@ export default {
       this.labels = Object.assign({}, result);
     },
     formatValues(columns, elements) {
-      var result = [];
+      let result = [];
       elements.map(element => {
-        var tempItem = {};
+        let tempItem = {};
 
         columns.map(column => {
           if (column.subHeaders) {
@@ -283,25 +348,49 @@ export default {
         });
         result.push(tempItem);
       });
-      this.items = result.slice();
+      const withHyperLinks = this.checkForHyperLinks(result);
+      this.items = withHyperLinks.slice();
       this.totalRows = this.items.length;
     },
-    formatStandardTypes(columns, elements) {
-      var typeColumnCode = "";
-      var result = [];
+    checkForHyperLinks(items) {
+      let result = items.slice();
+
+      result.map((row) => {
+        Object.keys(row).map((key) => {
+          const element = row[`${key}-links`] ?
+            replaceLink(row[key], row[`${key}-links`]) :
+            row[key];
+          row[key] = element;
+        })
+      })
+
+      return result;
+
+      function replaceLink(textToBeHyperLinked, textWithLink) {
+        let text = textWithLink;
+        let link = textWithLink.split('>')[1].split('<')[0];
+        let resultTemp = textWithLink.replace(link, textToBeHyperLinked);
+        resultTemp = resultTemp.replace(link, textToBeHyperLinked);
+        const result = resultTemp.replace(textToBeHyperLinked, link);
+        return result;
+      }
+    },
+    formatStandardTypes(columns, elements, name) {
+      let typeColumnCode = "";
+      let result = [];
 
       columns.map(column => {
-        if (column.name === this.typeColumnName) {
+        if (column.name === name) {
           typeColumnCode = column.code;
         }
       });
 
       elements.map(element => {
-        var typeName = element[typeColumnCode];
+        let typeName = element[typeColumnCode];
         result.indexOf(typeName) === -1 ? result.push(typeName) : null;
       });
 
-      this.standardTypes = result.slice();
+      return result.slice();
     }
   }
 };

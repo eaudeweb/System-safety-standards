@@ -16,3 +16,40 @@
 a.badge.badge-primary, .badge-success {
   margin: 2px;
 }
+body {
+  font-size: 14px;
+}
+
+.tooltip-a {
+  position: relative;
+  display: inline-block;
+  border-bottom: 1px dotted black;
+}
+
+.tooltip-a .tooltiptext {
+  visibility: hidden;
+  width: 200px;
+  background-color: black;
+  color: #fff;
+  text-align: center;
+  border-radius: 6px;
+  padding: 10px;
+
+  /* Position the tooltip */
+  position: absolute;
+  z-index: 1;
+  top: 100%;
+  left: 50%;
+  margin-left: -60px;
+}
+
+.tooltip-a:hover .tooltiptext {
+  visibility: visible;
+  opacity: 1;
+}
+.footer-links {
+  padding: 20px;
+  >a {
+    padding: 3px;
+  }
+}
