@@ -31,7 +31,7 @@
         <b-col md="3" class="my-1">
           <b-form-group horizontal label="Coverage" class="mb-0">
             <b-form-select v-model="selectedCoverage">
-              <option :value="null" selected>All coverages...</option>
+              <option :value="null" selected>Any ...</option>
               <option v-for="item in filteredLabels.standardCoverages" :value="item">{{item}}</option>
             </b-form-select>
           </b-form-group>
@@ -39,7 +39,7 @@
         <b-col md="3" class="my-1">
           <b-form-group horizontal label="Type" class="mb-0">
             <b-form-select v-model="selectedType">
-              <option :value="null" selected>All types...</option>
+              <option :value="null" selected>Any ...</option>
               <option v-for="item in filteredLabels.standardTypes" :value="item">{{item}}</option>
             </b-form-select>
           </b-form-group>
@@ -47,7 +47,7 @@
         <b-col md="3" class="my-1">
           <b-form-group horizontal :label="labelNames[0]" class="mb-0">
             <b-form-select v-model="selectedLabel1">
-              <option :value="null" selected>All {{labelNames[0].toLowerCase()}}</option>
+              <option :value="null" selected>Any ...</option>
               <option v-for="item in filteredLabels[labelNames[0]]" :value="item">{{item}}</option>
             </b-form-select>
           </b-form-group>
@@ -55,7 +55,7 @@
         <b-col md="3" class="my-1">
           <b-form-group horizontal :label="labelNames[1]" class="mb-0">
             <b-form-select v-model="selectedLabel2">
-              <option :value="null" selected>All {{labelNames[1].toLowerCase()}}</option>
+              <option :value="null" selected>Any ...</option>
               <option v-for="item in filteredLabels[labelNames[1]]" :value="item">{{item}}</option>
             </b-form-select>
           </b-form-group>
