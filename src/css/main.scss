@@ -13,7 +13,7 @@
   white-space: normal;
   font-size: 13px;
 }
-a.badge.badge-primary, .badge-success {
+a.badge {
   margin: 2px;
 }
 body {
@@ -39,8 +39,12 @@ body {
   position: absolute;
   z-index: 1;
   top: 100%;
-  left: 50%;
-  margin-left: -60px;
+  right: 30%;
+}
+
+.tooltip-a .tooltip-a-center {
+  top: 100%;
+  left: 0;
 }
 
 .tooltip-a:hover .tooltiptext {

@@ -20,6 +20,8 @@
           :footnote-abreviations="footnoteAbreviations"
           :columns-with-footers="columnsWithFooters"
           :columns-footers="columnsFooters"
+          :filter-columns="filterColumns"
+          :labels-variant="labelsVariant"
         ></gs-table>
         
       </div>
@@ -35,7 +37,7 @@ export default {
   name: 'app',
   props: ['title', 'spreadsheetUrl', 'spreadsheetUrlExport', 'typeColumnName', 'coverageColumnName',
     'numberOfSortableColumns', 'invisibleColumns','txt', 'footerLinksStandardsOrganizations', 'footnoteAbreviations',
-    'columnsWithFooters', 'columnsFooters'],
+    'columnsWithFooters', 'columnsFooters', 'filterColumns', 'labelsVariant'],
   components: {
     'gs-table': GSTable,
   }

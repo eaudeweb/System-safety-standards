@@ -28,38 +28,16 @@
       </b-row>
 
       <b-row>
-        <b-col md="3" class="my-1">
-          <b-form-group horizontal label="Coverage" class="mb-0">
-            <b-form-select v-model="selectedCoverage">
+        
+        <b-col v-for="filter in orderedUserFilters" md="3" class="my-1" :key="Object.keys(filter)[0]">
+          <b-form-group horizontal :label="Object.keys(filter)[0]" class="mb-0">
+            <b-form-select v-model="userFilters[Object.keys(filter)[0]].selected">
               <option :value="null" selected>Any ...</option>
-              <option v-for="item in filteredLabels.standardCoverages" :value="item">{{item}}</option>
+              <option v-for="item in filteredLabels[Object.keys(filter)[0]]" :value="item" :key="item">{{item}}</option>
             </b-form-select>
           </b-form-group>
         </b-col>
-        <b-col md="3" class="my-1">
-          <b-form-group horizontal label="Type" class="mb-0">
-            <b-form-select v-model="selectedType">
-              <option :value="null" selected>Any ...</option>
-              <option v-for="item in filteredLabels.standardTypes" :value="item">{{item}}</option>
-            </b-form-select>
-          </b-form-group>
-        </b-col>
-        <b-col md="3" class="my-1">
-          <b-form-group horizontal :label="labelNames[0]" class="mb-0">
-            <b-form-select v-model="selectedLabel1">
-              <option :value="null" selected>Any ...</option>
-              <option v-for="item in filteredLabels[labelNames[0]]" :value="item">{{item}}</option>
-            </b-form-select>
-          </b-form-group>
-        </b-col>
-        <b-col md="3" class="my-1">
-          <b-form-group horizontal :label="labelNames[1]" class="mb-0">
-            <b-form-select v-model="selectedLabel2">
-              <option :value="null" selected>Any ...</option>
-              <option v-for="item in filteredLabels[labelNames[1]]" :value="item">{{item}}</option>
-            </b-form-select>
-          </b-form-group>
-        </b-col>
+
       </b-row>
 
       <!-- Main table element -->
@@ -82,27 +60,19 @@
           <span v-html="data.value"></span>
         </template>
 
-        <template :slot="labelNames[0]" slot-scope="row">
+        <template
+          v-for="label in labelNames"
+          :slot="label.name" slot-scope="row">
           <b-badge
             href="#"
-            v-for="(value, key) in row.item[labelNames[0]]"
-            @click="onFilterByLabel1(value)"
-            variant="success"
+            v-for="(value, key) in row.item[label.name]"
+            @click="onFilterByLabel(row.item, label.name, value)"
+            :variant="label.variant"
           >
             {{ value }}
           </b-badge>
         </template>
 
-        <template :slot="labelNames[1]" slot-scope="row">
-          <b-badge
-            href="#"
-            v-for="(value, key) in row.item[labelNames[1]]"
-            @click="onFilterByLabel2(value)"
-            variant="primary"
-          >
-            {{ value }}
-          </b-badge>
-        </template>
       </b-table>
 
       <b-row>
@@ -136,22 +106,24 @@
 </template>
 
 <script>
-import TabelTop from "../lib/tableTop";
+import TabelTop from '../lib/tableTop';
 
 export default {
-  name: "GSTable",
+  name: 'GSTable',
   props: [
-    "title",
-    "spreadsheetUrl",
-    "spreadsheetUrlExport",
-    "typeColumnName",
-    "coverageColumnName",
-    "numberOfSortableColumns",
-    "invisibleColumns",
-    "footerLinksStandardsOrganizations",
-    "footnoteAbreviations",
-    "columnsWithFooters",
-    "columnsFooters"
+    'title',
+    'spreadsheetUrl',
+    'spreadsheetUrlExport',
+    'typeColumnName',
+    'coverageColumnName',
+    'numberOfSortableColumns',
+    'invisibleColumns',
+    'footerLinksStandardsOrganizations',
+    'footnoteAbreviations',
+    'columnsWithFooters',
+    'columnsFooters',
+    'filterColumns',
+    'labelsVariant'
   ],
   data() {
     return {
@@ -162,86 +134,76 @@ export default {
       currentPage: 1,
       perPage: 50,
       totalRows: null,
-      selectedLabel1: null,
-      selectedLabel2: null,
-      selectedType: null,
-      selectedCoverage: null,
       userFilters: [],
-      userFiltersSelections: [],
-      standardTypes: [],
-      standardCoverages: [],
       pageOptions: [50, 100, 150],
       filter: null,
     };
   },
   computed: {
     /**
-     * will return the filtered list after all filters have been applied
-     */
+    * Filtered list of items by applying each filter on the previous filtering
+    * {Object[]} this.items - array containing all rows
+    * {string} this.items['Standard'] - value
+    * {Object} this.userFilters - all filters as properties, with the selected value, on each property.
+    * {string} this.userFilters['Type'] - type value.
+    * @returns {Array} with the same structure as items, but as a copy and filtered
+    */
     filteredItems: function filterItems() {
-      let result = !!this.selectedLabel1
-        ? this.items.filter(item => {
-            return item[this.labelNames[0]].indexOf(this.selectedLabel1) > -1;
-          })
-        : this.items.slice();
+      let result = this.items.slice();
 
-      result = !!this.selectedLabel2
-        ? result.filter(item => {
-            return item[this.labelNames[1]].indexOf(this.selectedLabel2) > -1;
-          })
-        : result;
-
-      result = !!this.selectedType
-        ? result.filter(item => {
-            return item["Type"] === this.selectedType;
-          })
-        : result;
-
-      result = !!this.selectedCoverage
-        ? result.filter(item => {
-            return item["Coverage"] === this.selectedCoverage;
-          })
-        : result;
+      Object.keys(this.userFilters).map((filterName) => {
+        const selectedFilterValue = this.userFilters[filterName].selected;
+        // for each filter, will filter only those containing the value selected
+        result = !!selectedFilterValue
+          ? result.filter(item => {
+              return item[filterName].indexOf(selectedFilterValue) > -1;
+            })
+          : result.slice();
+      })
 
       return result;
     },
+    /**
+     * will search for the available filter options whithin the remaining items
+     */
     filteredLabels: function filterLabels() {
       let result = {};
 
-      if (!this.selectedLabel1 && !this.selectedLabel2 && !this.selectedType && !this.selectedCoverage) {
-        result = this.labels;
-        result["standardTypes"] = this.standardTypes;
-        result["standardCoverages"] = this.standardCoverages;
-      } else {
-        result[this.labelNames[0]] = [];
-        result[this.labelNames[1]] = [];
-        result["standardTypes"] = [];
-        result["standardCoverages"] = [];
+      this.filteredItems.map(item => { // search in all filtered items
+        Object.keys(this.userFilters).map((filterName) => { // search in all filters
+          const filter = this.userFilters[filterName];
 
-        this.filteredItems.map(item => {
-          item[this.labelNames[0]].map(label => {
-            result[this.labelNames[0]].indexOf(label) === -1
-              ? result[this.labelNames[0]].push(label)
-              : null;
-          });
-          item[this.labelNames[1]].map(label => {
-            result[this.labelNames[1]].indexOf(label) === -1
-              ? result[this.labelNames[1]].push(label)
-              : null;
-          });
-          result["standardTypes"].indexOf(item.Type) === -1
-            ? result["standardTypes"].push(item.Type)
-            : null;
-          result["standardCoverages"].indexOf(item.Coverage) === -1
-            ? result["standardCoverages"].push(item.Coverage)
-            : null;
-        });
-      }
+          filter.values.map((option) => { // search in all options of a filter
+            // option is found but the result either has not yet added the filter or the option has not been pushed in
+            if(item[filterName].indexOf(option) > -1 && (!result[filterName] || result[filterName].indexOf(option) === -1)) {
+              !result[filterName] ? result[filterName] = [] : null
+              result[filterName].push(option);
+            }
+          })
+        })
+      });
+
+      return result;
+    },
+    /**
+     * this will preserve the user's intended order of filters, without affecting the logic of the rest of the app
+     */
+    orderedUserFilters: function orderedUserFilters() {
+      let result = [];
+
+      const userFilters = this.filterColumns.split(', ');
+      userFilters.map((filterName) => {
+        let temp = {};
+        temp[filterName] = this.userFilters[filterName];
+        this.userFilters[filterName] ? result.push(temp) : null;
+      });
 
       return result;
     }
   },
   created() {
+    // this.makeFilters();
+
     TabelTop.init({
       key: this.spreadsheetUrl,
       callback: this.formatSheetDataForTable,
@@ -249,32 +211,66 @@ export default {
     });
   },
   methods: {
+    /**
+     * maked the headers, the labels and the items (rows)
+     * {Array} this.headers - the headers used by the table
+     * {Object} this.labels - only the columns that have sub columns, these will be treated as labels (loloured badges)
+     * {Array} this.items - all the items
+     * {Object} this.items - certain values found for each header
+     * {string | Array} this.items[headerName] - value in cell, or labels that apply to it
+     * {Object} this.userFilters - contains the actual filters with options and selected value
+     * {Object} this.userFilters['Coverage'] - an example of a filter
+     * {Array} this.userFilters['Coverage'].values - options for 'Coverage' filter
+     * {string} this.userFilters['Coverage'].selected - selected option
+     */
     formatSheetDataForTable(data) {
-      this.formatHeaders(data.columnNamesList);
-      this.formatLabels(data.columnNamesList);
-      this.formatValues(data.columnNamesList, data.elements);
-      this.standardTypes = this.formatStandardTypes(data.columnNamesList, data.elements, this.typeColumnName);
-      this.standardCoverages = this.formatStandardTypes(data.columnNamesList, data.elements, this.coverageColumnName);
+      this.headers = this.formatHeaders(data.columnNamesList);
+      this.labels = this.formatLabels(data.columnNamesList);
+      this.items = this.formatValues(data.columnNamesList, data.elements);
+      this.totalRows = this.items.length;
+      const userFilterNames = this.filterColumns.split(', ');
+      const labelFilters = makeLabelFiltersList(this.labels, userFilterNames);
+      const nonLabelFilters = makeNonLabelFiltersList.call(this, this.labels, userFilterNames);
+
+      this.userFilters = Object.assign(labelFilters, nonLabelFilters);
+
+      function makeLabelFiltersList(labels, filterNames) {
+        let result = {};
+
+        filterNames.map((filterName) => {
+          if(labels[filterName]) {
+            result[filterName] = {selected: null, values: []};
+            result[filterName].values = labels[filterName].slice();
+          }
+        });
+
+        return result;
+      }
+      function makeNonLabelFiltersList(labels, filterNames) {
+        let result = {};
+
+        filterNames.map((filterName) => {
+          if(!labels[filterName]) {
+            result[filterName] = {selected: null, values: []};
+            result[filterName].values = this.formatStandardTypes(data.columnNamesList, data.elements, filterName);
+          }
+        });
+
+        return result;
+      }
     },
-    onFiltered(filteredItems) {
-      this.totalRows = filteredItems.length;
-      this.currentPage = 1;
-    },
-    onFilterByLabel1(label) {
-      this.selectedLabel1 = label;
-    },
-    onFilterByLabel2(label) {
-      this.selectedLabel2 = label;
-    },
-    onResetFilters() {
-      this.selectedLabel1 = null;
-      this.selectedLabel2 = null;
-      this.selectedType = null;
-      this.selectedCoverage = null;
-    },
+    /**
+     * it makes the list of headers, considering if some are invisible and if they have some tooltips inside
+     * @returns {Array} this.headers - the headers used by the table
+     * @returns {string} this.headers.displayName - almost same as label, but this is can be altered if a link to footer is passed
+     * @returns {string} this.headers.key - the name found by api
+     * @returns {string} this.headers.label - same as displayName but this has to be as found in api to be able to match to items
+     * @returns {string} this.headers.sortDirection - desc or asc
+     * @returns {boolean} this.headers.sortable
+     */
     formatHeaders(columns) {
-      let result = [];
       const footerIndicators = "abcdefghijklmnopqrstuvwxyz";
+      let result = [];
       let index = 0;
       let footerIndicatorsIndex = 0;
       let invisibleColumnsList = this.invisibleColumns.split(', ');
@@ -285,7 +281,6 @@ export default {
             key: header.name,
             label: addFooterIndication.call(this, header.name),
             displayName: header.name,
-            // label: header.name,
             sortable: index < this.numberOfSortableColumns ? true : false,
             sortDirection: "desc"
           };
@@ -293,7 +288,7 @@ export default {
           index++;
         }
       });
-      this.headers = result.slice();
+      return result.slice();
 
       function addFooterIndication(item) {
         let result = item;
@@ -314,8 +309,25 @@ export default {
         return result;
       }
     },
+    /**
+     * makes labels and labelNames that will also have a variant for colour
+     * {Array} this.labelNames - array of labelNames
+     * {string} this.labelNames.name - name of label
+     * {string} this.labelNames - variant if provided by the user or default to 'primary'
+     * @returns {Object} this.labels - only the columns that have sub columns, these will be treated as labels (loloured badges)
+     * @returns {Array} this.labels['Life cycle stages'] - all subheaders from google sheet found by the api
+     */
     formatLabels(columns) {
       let result = {};
+      const labesWithVariant = this.labelsVariant.split(', ');
+      let labesWithVariantObj = {};
+
+      labesWithVariant.map((item) => {
+        const labelName = item.split(':')[0];
+        const labelVariant = item.split(':')[1];
+        labesWithVariantObj[labelName] = labelVariant;
+      })
+
       columns.map(header => {
         header.subHeaders ? (result[header.name] = []) : null;
         if (header.subHeaders) {
@@ -323,11 +335,17 @@ export default {
             let subHeaderName = header.subHeaders[key];
             result[header.name].push(subHeaderName);
           });
-          this.labelNames.push(header.name);
+          this.labelNames.push({name: header.name, variant: labesWithVariantObj[header.name] || 'primary'});
         }
       });
-      this.labels = Object.assign({}, result);
+
+      return Object.assign({}, result);
     },
+    /**
+     * will make row for the table considering if some have hyperlinks found in other tables that have the same name with '-links'
+     * @returns {Array} this.items - all the items
+     * @returns {Object} this.items - certain values found for each header
+     */
     formatValues(columns, elements) {
       let result = [];
       elements.map(element => {
@@ -349,8 +367,7 @@ export default {
         result.push(tempItem);
       });
       const withHyperLinks = this.checkForHyperLinks(result);
-      this.items = withHyperLinks.slice();
-      this.totalRows = this.items.length;
+      return withHyperLinks.slice();
     },
     checkForHyperLinks(items) {
       let result = items.slice();
@@ -375,6 +392,9 @@ export default {
         return result;
       }
     },
+    /**
+     * checks for filter options by collecting all the values for that filter in all the rows (items)
+     */
     formatStandardTypes(columns, elements, name) {
       let typeColumnCode = "";
       let result = [];
@@ -391,6 +411,19 @@ export default {
       });
 
       return result.slice();
+    },
+    onFiltered(filteredItems) {
+      this.totalRows = filteredItems.length;
+      this.currentPage = 1;
+    },
+    onFilterByLabel(item, labelName, value) {
+      this.userFilters[labelName] ? this.userFilters[labelName].selected = value : null;
+    },
+    onResetFilters() {
+      Object.keys(this.userFilters).map((filterName) => {
+        let filter = this.userFilters[filterName];
+        filter.selected = null;
+      });
     }
   }
 };
