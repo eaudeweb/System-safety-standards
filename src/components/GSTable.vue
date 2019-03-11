@@ -95,7 +95,7 @@
           </b-input-group>
         </b-col>
 
-        <div class="footer-links" v-html="footnoteAbreviations">
+        <div class="footer-links" v-html="footnoteAbbreviations">
         </div>
         <div id="bottom" class="footer-links" v-html="footerLinksStandardsOrganizations">
         </div>
@@ -114,12 +114,10 @@ export default {
     'title',
     'spreadsheetUrl',
     'spreadsheetUrlExport',
-    'typeColumnName',
-    'coverageColumnName',
     'numberOfSortableColumns',
     'invisibleColumns',
     'footerLinksStandardsOrganizations',
-    'footnoteAbreviations',
+    'footnoteAbbreviations',
     'columnsWithFooters',
     'columnsFooters',
     'filterColumns',

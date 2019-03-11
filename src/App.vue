@@ -12,12 +12,10 @@
         <gs-table 
           :spreadsheet-url="spreadsheetUrl"
           :spreadsheet-url-export="spreadsheetUrlExport"
-          :type-column-name="typeColumnName"
           :number-of-sortable-columns="numberOfSortableColumns"
           :invisible-columns="invisibleColumns"
-          :coverage-column-name="coverageColumnName"
           :footer-links-standards-organizations="footerLinksStandardsOrganizations"
-          :footnote-abreviations="footnoteAbreviations"
+          :footnote-abbreviations="footnoteAbbreviations"
           :columns-with-footers="columnsWithFooters"
           :columns-footers="columnsFooters"
           :filter-columns="filterColumns"
@@ -35,8 +33,8 @@ import GSTable from './components/GSTable.vue';
 
 export default {
   name: 'app',
-  props: ['title', 'spreadsheetUrl', 'spreadsheetUrlExport', 'typeColumnName', 'coverageColumnName',
-    'numberOfSortableColumns', 'invisibleColumns','txt', 'footerLinksStandardsOrganizations', 'footnoteAbreviations',
+  props: ['title', 'spreadsheetUrl', 'spreadsheetUrlExport', 'numberOfSortableColumns', 'invisibleColumns',
+    'txt', 'footerLinksStandardsOrganizations', 'footnoteAbbreviations',
     'columnsWithFooters', 'columnsFooters', 'filterColumns', 'labelsVariant'],
   components: {
     'gs-table': GSTable,
