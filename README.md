@@ -146,12 +146,12 @@
 
 ### Google Sheet use
 1. The first row needs to be empty, always. The Google `/feeds/worksheets/` api doesn't return the names of the headers, so this is a way to correct that.
-1. Other columns can be added.
-1. `Keep only two columns with sub-headers` (like Market sectors)
-1. The order of the columns can be changed, but keep in mind the sortable aspect.
+1. Other columns can be added, even with subheaders.
+1. Columns with links for other columns, to be shown as `hyperlinks` can be added but they have to have the same name followed by '-links'
+1. The order of the columns can be changed
 1. Rows can be added.
 1. Sub-headers can be added or edited.
-1. The links must include `http` or `https` in order to be shown as links in the widget.
+1. The links must include `http`, `https` or `www` in order to be shown as links in the widget.
 1. If a new sheet is added that will not show in the app.
 
 ### Creating your own Google Sheet:
