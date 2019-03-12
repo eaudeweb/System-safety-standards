@@ -43,6 +43,8 @@
       <!-- Main table element -->
       <b-table
         responsive
+        striped
+        hover
         show-empty
         stacked="sm"
         :items="filteredItems"
