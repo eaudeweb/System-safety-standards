@@ -149,6 +149,7 @@
 1. Other columns can be added, even with subheaders.
 1. Columns with links for other columns, to be shown as `hyperlinks` can be added but they have to have the same name followed by '-links'
 1. The order of the columns can be changed
+1. The order of the filters is taken from the order written in __filter-columns__ attribute in the widget
 1. Rows can be added.
 1. Sub-headers can be added or edited.
 1. The links must include `http`, `https` or `www` in order to be shown as links in the widget.
@@ -173,7 +174,24 @@ Requirements:
 * yarn 1.13.0 used
 
 Installation:
-run in development mode
+* run in development mode
+
         yarn serve
-make build
+* make build
+
         yarn build
+the resulted build will be found in _/dist_ folder.
+
+Development:
+* The `index.html` file where the app is used as a widget is found in _/public_
+All changes should be done here.
+* `App.vue` is the main component, that wraps the app around the actual google sheet component. It also takes all the attributes and converts them into __props__ for the google sheet component.
+* `GSTable.vue` takes the data provided by the `tableTop.js` file and formats it for the table.
+* `tableTop.js` is the modified version, that treats data that is more complex (ex. headers with subheaders), it is made to consider only one sheet.
+
+Publish to GitHub Pages (Github will look for _docs_ folder to load the statics it finds there):
+* move the _/dist_ files in the _/docs_ folder
+* modify the resulting index.html file (that is found in _/dist_) by replacing all src links to look into the same folder instead of looking in the root
+        
+        ex: '<link href=/css/app.dd3a6569.css ...' to '<link href=css/app.dd3a6569.css...'
+* commit _/docs_ files to Github
