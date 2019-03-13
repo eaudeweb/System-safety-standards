@@ -58,3 +58,24 @@ body {
     padding: 3px;
   }
 }
+
+tr {
+  background-color: #eeeff4;
+}
+.table-striped tbody tr:nth-of-type(odd) {
+  background-color: #f5fafa;
+}
+.table-striped tbody tr:nth-of-type(even) {
+  background-color: white;
+}
+.badge-success {
+  color: #fff;
+  background-color: #2bb694;
+}
+.badge-warning {
+  color: #fff;
+  background-color: #f1d444;
+}
+.col-form-label {
+  font-weight: 600;
+}

@@ -30,7 +30,7 @@
       <b-row>
         
         <b-col v-for="filter in orderedUserFilters" md="3" class="my-1" :key="Object.keys(filter)[0]">
-          <b-form-group horizontal :label="Object.keys(filter)[0]" class="mb-0">
+          <b-form-group horizontal :label="Object.keys(filter)[0].toUpperCase()" class="mb-0">
             <b-form-select v-model="userFilters[Object.keys(filter)[0]].selected">
               <option :value="null" selected>Any ...</option>
               <option v-for="item in filteredLabels[Object.keys(filter)[0]]" :value="item" :key="item">{{item}}</option>
@@ -154,7 +154,7 @@ export default {
       Object.keys(this.userFilters).map((filterName) => {
         const selectedFilterValue = this.userFilters[filterName].selected;
         // for each filter, will filter only those containing the value selected
-        result = !!selectedFilterValue
+        result = selectedFilterValue
           ? result.filter(item => {
               return item[filterName].indexOf(selectedFilterValue) > -1;
             })
@@ -384,11 +384,11 @@ export default {
       return result;
 
       function replaceLink(textToBeHyperLinked, textWithLink) {
-        let text = textWithLink;
         let link = textWithLink.split('>')[1].split('<')[0];
         let resultTemp = textWithLink.replace(link, textToBeHyperLinked);
         resultTemp = resultTemp.replace(link, textToBeHyperLinked);
         const result = resultTemp.replace(textToBeHyperLinked, link);
+
         return result;
       }
     },
