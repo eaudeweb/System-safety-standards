@@ -23,7 +23,16 @@
             @click="onResetFilters"
             variant="outline-primary"
             class="mb-0"
-          >Reset filters</b-button>
+          >Reset filters
+          </b-button>
+          <b-button
+            size="md"
+            style="float: right;"
+            @click="onResetSort"
+            variant="outline-primary"
+            class="mb-0"
+          >Reset order
+          </b-button>
         </b-col>
       </b-row>
 
@@ -53,6 +62,7 @@
         :per-page="perPage"
         :filter="filter"
         @filtered="onFiltered"
+        :sort-by.sync="sortBy"
       >
         <template
           v-for="header in headers.slice(0, headers.length - 2)"
@@ -137,6 +147,7 @@ export default {
       userFilters: [],
       pageOptions: [50, 100, 150],
       filter: null,
+      sortBy: null,
     };
   },
   computed: {
@@ -424,6 +435,9 @@ export default {
         let filter = this.userFilters[filterName];
         filter.selected = null;
       });
+    },
+    onResetSort() {
+      this.sortBy = null;
     }
   }
 };

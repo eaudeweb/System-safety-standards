@@ -2,8 +2,10 @@
   <div class="container-fluid" v-cloak>
     <div class="row flex-xl-nowrap2">
       <div class="bd-content">
-        <h1 class="text-center">{{title}}
-        </h1>
+        <header>
+          <h1>{{title}}
+          </h1>          
+        </header>
 
         <div class="p-container" v-html="txt">
         </div>

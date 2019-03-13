@@ -1,4 +1,46 @@
 @import "bootstrap/scss/bootstrap.scss";
+@import url('https://fonts.googleapis.com/css?family=Montserrat');
+
+@font-face {
+  font-family: 'Calibre-Semibold';
+  src: url(CalibreWeb-Semibold.woff2) format("woff2");
+  font-style: normal;
+}
+
+@font-face {
+  font-family: 'Calibre';
+  src: url(CalibreWeb-Semibold.woff2) format('woff2');
+  font-weight: 600;
+  font-style: normal;
+}
+
+@font-face {
+  font-family: 'Calibre';
+  src: url(CalibreWeb-Regular.woff2) format('woff2');
+  font-weight: normal;
+  font-style: normal;
+}
+
+@font-face {
+  font-family: 'Calibre';
+  src: url(CalibreWeb-Medium.woff2) format('woff2');
+  font-weight: 500;
+  font-style: normal;
+}
+
+@font-face {
+  font-family: 'Calibre';
+  src: url(CalibreWeb-Bold.woff2) format('woff2');
+  font-weight: bold;
+  font-style: normal;
+}
+
+@font-face {
+  font-family: 'Calibre';
+  src: url(CalibreWeb-RegularItalic.woff2) format('woff2');
+  font-weight: normal;
+  font-style: italic;
+}
 
 [v-cloak] > * { display:none; }
 [v-cloak]::before { 
@@ -8,17 +50,31 @@
   height: 16px;
   background-image: url('data:image/gif;base64,R0lGODlhEAAQAPIAAP///wAAAMLCwkJCQgAAAGJiYoKCgpKSkiH/C05FVFNDQVBFMi4wAwEAAAAh/hpDcmVhdGVkIHdpdGggYWpheGxvYWQuaW5mbwAh+QQJCgAAACwAAAAAEAAQAAADMwi63P4wyklrE2MIOggZnAdOmGYJRbExwroUmcG2LmDEwnHQLVsYOd2mBzkYDAdKa+dIAAAh+QQJCgAAACwAAAAAEAAQAAADNAi63P5OjCEgG4QMu7DmikRxQlFUYDEZIGBMRVsaqHwctXXf7WEYB4Ag1xjihkMZsiUkKhIAIfkECQoAAAAsAAAAABAAEAAAAzYIujIjK8pByJDMlFYvBoVjHA70GU7xSUJhmKtwHPAKzLO9HMaoKwJZ7Rf8AYPDDzKpZBqfvwQAIfkECQoAAAAsAAAAABAAEAAAAzMIumIlK8oyhpHsnFZfhYumCYUhDAQxRIdhHBGqRoKw0R8DYlJd8z0fMDgsGo/IpHI5TAAAIfkECQoAAAAsAAAAABAAEAAAAzIIunInK0rnZBTwGPNMgQwmdsNgXGJUlIWEuR5oWUIpz8pAEAMe6TwfwyYsGo/IpFKSAAAh+QQJCgAAACwAAAAAEAAQAAADMwi6IMKQORfjdOe82p4wGccc4CEuQradylesojEMBgsUc2G7sDX3lQGBMLAJibufbSlKAAAh+QQJCgAAACwAAAAAEAAQAAADMgi63P7wCRHZnFVdmgHu2nFwlWCI3WGc3TSWhUFGxTAUkGCbtgENBMJAEJsxgMLWzpEAACH5BAkKAAAALAAAAAAQABAAAAMyCLrc/jDKSatlQtScKdceCAjDII7HcQ4EMTCpyrCuUBjCYRgHVtqlAiB1YhiCnlsRkAAAOwAAAAAAAAAAAA==');
 }
+.bd-content header h1, .bd-content header h2 {
+  font-weight: bold;
+  font-style: normal;
+  color: #103dcf;
+  font-size: 24px;
+  padding-left: 15px;
+}
 .table td, .table td * {
   word-break: break-all;
   word-wrap: anywhere;
   white-space: normal;
-  font-size: 13px;
+  font-size: 16px;
+  min-width: 70px;
+}
+.table th, .table td {
+  padding: 0.6rem;
 }
 a.badge {
   margin: 2px;
+  font-weight: 100;
+  text-align: left;
 }
 body {
-  font-size: 14px;
+  font-size: 16px;
+  font-family: 'Calibre', 'Montserrat', sans-serif;
 }
 
 .tooltip-a {
@@ -70,11 +126,11 @@ tr {
 }
 .badge-success {
   color: #fff;
-  background-color: #2bb694;
+  background-color: #2bb8a7;
 }
 .badge-warning {
   color: #fff;
-  background-color: #f1d444;
+  background-color: #f3b600;
 }
 .col-form-label {
   font-weight: 600;
