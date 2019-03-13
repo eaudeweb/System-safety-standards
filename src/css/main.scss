@@ -58,8 +58,8 @@
   padding-left: 15px;
 }
 .table td, .table td * {
-  word-break: break-all;
-  word-wrap: anywhere;
+  word-break: break-word;
+  word-wrap: break-word;
   white-space: normal;
   font-size: 16px;
   min-width: 70px;
@@ -137,4 +137,7 @@ tr {
 }
 a.badge-warning:focus, a.badge-warning:hover {
   color: #fff;
+}a.badge-success:hover, a.badge-success:focus {
+  color: #fff;
+  background-color: #1d8d7f;
 }
