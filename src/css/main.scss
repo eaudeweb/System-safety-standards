@@ -104,7 +104,7 @@ body {
   left: 0;
 }
 
-.tooltip-a:hover .tooltiptext {
+.tooltip-a:hover .tooltiptext, .tooltip-a:focus .tooltiptext {
   visibility: visible;
   opacity: 1;
 }
@@ -137,7 +137,8 @@ tr {
 }
 a.badge-warning:focus, a.badge-warning:hover {
   color: #fff;
-}a.badge-success:hover, a.badge-success:focus {
+}
+a.badge-success:hover, a.badge-success:focus {
   color: #fff;
   background-color: #1d8d7f;
 }

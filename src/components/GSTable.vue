@@ -51,6 +51,7 @@
 
       <!-- Main table element -->
       <b-table
+        ref="vuetable"
         responsive
         striped
         hover
@@ -119,6 +120,9 @@
 
 <script>
 import TabelTop from '../lib/tableTop';
+import debounce from 'lodash.debounce';
+
+let browserSizeRange = window.innerWidth;
 
 export default {
   name: 'GSTable',
@@ -213,15 +217,39 @@ export default {
     }
   },
   created() {
-    // this.makeFilters();
-
     TabelTop.init({
       key: this.spreadsheetUrl,
       callback: this.formatSheetDataForTable,
       simpleSheet: false
     });
+
+    this.adjustFootnotesForResolution();
   },
   methods: {
+    /**
+     * will remake the labels to show tooltip only for desktop table
+     * will remove the tooltip from label if is rendered for mobile (<580px)
+     */
+    adjustFootnotesForResolution() {
+      window.addEventListener('resize', debounce(() => {
+        console.log('resized!');
+        const temp = this.headers.slice();
+
+        if(window.innerWidth < 580 && browserSizeRange > 580) {
+          temp.map((header) => {
+            header.label = header.displayName;
+          });
+          browserSizeRange = window.innerWidth;
+          this.headers = temp.slice();
+        } else if (window.innerWidth > 580 && browserSizeRange < 580) {
+          temp.map((header) => {
+            header.label = header.labelWithFootnote;
+          });
+          browserSizeRange = window.innerWidth;
+          this.headers = temp.slice();
+        }
+      }, 1000));
+    },
     /**
      * maked the headers, the labels and the items (rows)
      * {Array} this.headers - the headers used by the table
@@ -288,12 +316,14 @@ export default {
 
       columns.map(header => {
         if(invisibleColumnsList.indexOf(header.name) === -1) {
+          const labelWithFootnote = addFooterIndication.call(this, header.name);
           let item = {
             key: header.name,
-            label: addFooterIndication.call(this, header.name),
+            label: window.innerWidth > 580 ? labelWithFootnote : header.name,
+            labelWithFootnote,
             displayName: header.name,
             sortable: index < this.numberOfSortableColumns ? true : false,
-            sortDirection: "desc"
+            sortDirection: "desc",
           };
           result.push(item);
           index++;

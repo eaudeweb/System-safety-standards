@@ -10,6 +10,7 @@
   "dependencies": {
     "bootstrap-vue": "^2.0.0-rc.11",
     "document-register-element": "^1.13.1",
+    "lodash.debounce": "^4.0.8",
     "vue": "^2.5.21",
     "vue-custom-element": "^3.2.6"
   },
