@@ -1,7 +1,9 @@
 <template>
   <div id="table-gsheet">
+
     <!-- Filters -->
     <b-container fluid v-if="items && items.length > 0">
+
       <!-- User Interface controls -->
       <b-row>
         <b-col md="8" class="my-1">
@@ -16,7 +18,7 @@
             style="float: right;"
             target="_blank"
             :href="spreadsheetUrlExport"
-          >Export</a>
+          >Export and Print</a>
           <b-button
             size="md"
             style="float: right;"
@@ -49,73 +51,87 @@
 
       </b-row>
 
-      <!-- Main table element -->
-      <b-table
-        ref="vuetable"
-        responsive
-        striped
-        hover
-        show-empty
-        stacked="sm"
-        :items="filteredItems"
-        :fields="headers"
-        :current-page="currentPage"
-        :per-page="perPage"
-        :filter="filter"
-        @filtered="onFiltered"
-        :sort-by.sync="sortBy"
-      >
-        <template
-          v-for="header in headers.slice(0, headers.length - 2)"
-          :slot="header.displayName"
-          slot-scope="data"
-        >
-          <span v-html="data.value"></span>
-        </template>
+      <div class="panel panel-default" :class="{'panel-fullscreen': fullscreen}">
+        <div class="panel-heading">
+          <ul class="list-inline panel-actions">
+            <li>
+              <a href="#" id="panel-fullscreen" role="button" title="Toggle fullscreen" @click.stop="() => {fullscreen = !fullscreen}">
+                <i class="fas" :class="{'fa-compress-arrows-alt': fullscreen, 'fa-arrows-alt': !fullscreen}"></i>
+              </a>
+            </li>
+          </ul>
+        </div>
 
-        <template
-          v-for="label in labelNames"
-          :slot="label.name" slot-scope="row">
-          <b-badge
-            href="#"
-            v-for="(value, key) in row.item[label.name]"
-            @click="onFilterByLabel(row.item, label.name, value)"
-            :variant="label.variant"
-          >
-            {{ value }}
-          </b-badge>
-        </template>
-
-      </b-table>
-
-      <b-row>
-        <b-col md="3" class="my-1">
-          <label class="mr-sm-2">Total results {{totalRows}}</label>
-        </b-col>
-
-        <b-col md="6" class="my-1 d-flex justify-content-center">
-          <b-pagination
-            :total-rows="totalRows"
+        <div class="panel-body">
+          <!-- Main table element -->
+          <b-table
+            ref="vuetable"
+            responsive
+            striped
+            hover
+            show-empty
+            stacked="sm"
+            :items="filteredItems"
+            :fields="headers"
+            :current-page="currentPage"
             :per-page="perPage"
-            v-model="currentPage"
-            class="my-0"
-          />
-        </b-col>
+            :filter="filter"
+            @filtered="onFiltered"
+            :sort-by.sync="sortBy"
+          >
+            <template
+              v-for="header in headers.slice(0, headers.length - 2)"
+              :slot="header.displayName"
+              slot-scope="data"
+            >
+              <span v-html="data.value"></span>
+            </template>
 
-        <b-col md="3" class="my-1">
-          <b-input-group prepend="Page size">
-            <b-form-select class="mb-2 mr-sm-2 mb-sm-0" :options="pageOptions" v-model="perPage"></b-form-select>
-          </b-input-group>
-        </b-col>
+            <template
+              v-for="label in labelNames"
+              :slot="label.name" slot-scope="row">
+              <b-badge
+                href="#"
+                v-for="(value, key) in row.item[label.name]"
+                @click="onFilterByLabel(row.item, label.name, value)"
+                :variant="label.variant"
+              >
+                {{ value }}
+              </b-badge>
+            </template>
 
-        <div class="footer-links" v-html="footnoteAbbreviations">
+          </b-table>
+
+          <b-row>
+            <b-col md="3" class="my-1">
+              <label class="mr-sm-2">Total results {{totalRows}}</label>
+            </b-col>
+
+            <b-col md="6" class="my-1 d-flex justify-content-center">
+              <b-pagination
+                :total-rows="totalRows"
+                :per-page="perPage"
+                v-model="currentPage"
+                class="my-0"
+              />
+            </b-col>
+
+            <b-col md="3" class="my-1">
+              <b-input-group prepend="Page size">
+                <b-form-select class="mb-2 mr-sm-2 mb-sm-0" :options="pageOptions" v-model="perPage"></b-form-select>
+              </b-input-group>
+            </b-col>
+
+            <div class="footer-links" v-html="footnoteAbbreviations">
+            </div>
+            <div id="bottom" class="footer-links" v-html="footerLinksStandardsOrganizations">
+            </div>
+          </b-row>
         </div>
-        <div id="bottom" class="footer-links" v-html="footerLinksStandardsOrganizations">
-        </div>
-      </b-row>
+      </div>
     </b-container>
-
   </div>
+
 </template>
 
 <script>
@@ -152,6 +168,7 @@ export default {
       pageOptions: [50, 100, 150],
       filter: null,
       sortBy: null,
+      fullscreen: false,
     };
   },
   computed: {
