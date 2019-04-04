@@ -1,114 +1,113 @@
-<!DOCTYPE html>
-<html lang=en>
-
-<head>
-  <meta charset=utf-8>
-  <meta http-equiv=X-UA-Compatible content="IE=edge">
-  <meta name=viewport content="width=device-width,initial-scale=1">
-  <link rel=icon href=favicon.ico> <title>google-sheet-embed</title>
+<!DOCTYPE html><html lang=en>
+<head><meta charset=utf-8><meta http-equiv=X-UA-Compatible content="IE=edge"><meta name=viewport content="width=device-width,initial-scale=1">
+  <link rel=icon href=favicon.ico>
+  <title>System safety standards</title>
   <link href=css/app.7b00ecb9.css rel=preload as=style>
-  <link href=js/app.b32a1a23.js rel=preload as=script>
+  <link href=js/app.c561e6ae.js rel=preload as=script>
   <link href=css/app.7b00ecb9.css rel=stylesheet>
 </head>
-
-<body><noscript><strong>We're sorry but google-sheet-embed doesn't work properly without JavaScript enabled. Please
-      enable it to continue.</strong></noscript>
-  <gsheet-vue-widget title="System safety standards"
-    spreadsheet-url="https://docs.google.com/spreadsheets/d/1H4LeCBrDhiO8SRmMaZVDFPft7TnZik89N11Qdwnr1Ic/edit?usp=sharing"
-    spreadsheet-url-export="https://docs.google.com/spreadsheets/d/1H4LeCBrDhiO8SRmMaZVDFPft7TnZik89N11Qdwnr1Ic/export?gid=0&format=xlsx"
+<body><noscript><strong>We're sorry but System safety standards doesn't work properly without JavaScript enabled. Please enable it to continue.</strong></noscript>
+  <gsheet-vue-widget title="System safety standards" 
+    spreadsheet-url="https://docs.google.com/spreadsheets/d/10inbJvocvQP2xCCRPPqIOOPYt8w9SlwsqzPMqrY2Il8/edit#gid=1439320710" 
+    spreadsheet-url-export="https://docs.google.com/spreadsheets/d/10inbJvocvQP2xCCRPPqIOOPYt8w9SlwsqzPMqrY2Il8/edit#gid=1439320710&format=xlsx"
     filter-columns="Coverage, Type, Market sectors, Life cycle stages"
-    labels-variant="Market sectors:warning, Life cycle stages:success" number-of-sortable-columns=4
+    labels-variant="Market sectors:warning, Life cycle stages:success"
+    number-of-sortable-columns=4
     invisible-columns="Coverage, Standard-links, Specific committee-links"
-    columns-with-footers="Status, Life cycle stages" columns-footers='
-          <span id="Status" class="tooltiptext">
-            The year of the latest complete publication and/or amendment is given.
+    columns-with-footers="Status, Life cycle stages"
+    columns-footers='
+      <span id="Status" class="tooltiptext">
+        The year of the latest complete publication and/or amendment is given.
+      </span>
+      <span id="Life cycle stages" class="tooltiptext">
+        Standards derived from the IEC 60335 series cover explicitly only system design. 
+        Installation, operation and repair are covered indirectly through specifications on what is required to be written in the manuals of the relevant appliances.
+      </span>
+    ' txt='
+      <p>
+        This interactive tool presents a non-exhaustive list of international, 
+        regional and national safety standards relevant to Refrigeration, Air-Conditioning and Heat Pump equipment developed 
+        by relevant Standards Organizations.
+      </p>
+
+      <p>
+        The standards are broadly classified into two categories: Main system safety standards, subdivided into 
+        <a
+          class="tooltip-a"
+          href="#"
+        >Vertical system safety standards
+          <span class="tooltiptext tooltip-a-center">
+            Vertical system safety standards (also known as product standards) comprise safety aspects for a specific product or system, or a family of products or systems
           </span>
-          <span id="Life cycle stages" class="tooltiptext">
-            Standards derived from the IEC 60335 series cover explicitly only system design. 
-            Installation, operation and repair are covered indirectly through specifications on what is required to be written in the manuals of the relevant appliances.
+        </a> and
+        <a
+          class="tooltip-a"
+          href="#"
+        >Horizontal system safety standards
+          <span class="tooltiptext tooltip-a-center">
+            Horizontal System safety standards (also known as group safety standard) comprise safety aspects applicable to several products or systems, or a family of similar products or systems
           </span>
-        ' txt='
-          <p>
-            This interactive tool presents a non-exhaustive list of international, 
-            regional and national safety standards relevant to Refrigeration, Air-Conditioning and Heat Pump equipment developed 
-            by relevant Standards Organizations.
-          </p>
-  
-          <p>
-            The standards are broadly classified into two categories: Main system safety standards, subdivided into 
-            <a
-              class="tooltip-a"
-              href="#"
-            >Vertical system safety standards
-              <span class="tooltiptext tooltip-a-center">
-                Vertical system safety standards (also known as product standards) comprise safety aspects for a specific product or system, or a family of products or systems
-              </span>
-            </a> and
-            <a
-              class="tooltip-a"
-              href="#"
-            >Horizontal system safety standards
-              <span class="tooltiptext tooltip-a-center">
-                Horizontal System safety standards (also known as group safety standard) comprise safety aspects applicable to several products or systems, or a family of similar products or systems
-              </span>
-            </a>
-            , and
-            <a
-              href="#"
-              class="tooltip-a"
-            >Supplementary standards
-              <span class="tooltiptext tooltip-a-center">
-                Supplementary standards support the main system safety standards for refrigeration, air-conditioning and heat-pump systems and appliances, for example, standards for refrigerant classification or standards for hazardous areas
-              </span>
-            </a>.
-          </p>
-  
-          <p>
-            To refine your search results, use more than one filter.
-          </p>
-          <p>
-            Scroll down or click <a href="#bottom">here</a> to see abbreviations and standards organizations
-          </p>
-          ' footer-links-standards-organizations='
-          <a
-            target="_blank"
-            href="https://www.iso.org"
-          ><sup>1</sup>https://www.iso.org;
-          </a>
-          <a
-            target="_blank"
-            href="https://www.iec.ch/"
-          >https://www.iec.ch/;
-          </a>
-          <a
-            target="_blank"
-            href="https://www.cencenelec.eu/Pages/default.aspx"
-          >https://www.cencenelec.eu/Pages/default.aspx;
-          </a>
-          <a
-            target="_blank"
-            href="https://www.ul.com/"
-          >https://www.ul.com/;
-          </a>
-          <a
-            target="_blank"
-            href="https://www.ansi.org/"
-          >https://www.ansi.org/;
-          </a>
-          <a
-            target="_blank"
-            href="https://www.ashrae.org/;"
-          >https://www.ashrae.org/;
-          </a>
-          <a
-            target="_blank"
-            href="http://www.chinacsrmap.org/"
-          >http://www.chinacsrmap.org/
-          </a>
-        ' footnote-abbreviations="
-          <i>Abbreviations</i>: AHSRAE - American Society of Heating, Refrigerating and Air-Conditioning Engineers, 
-          ANSI – American National Standards Institute, EU – European Union, IEC – International Electrotechnical Commission, 
-          EN – European Standard, IEC - International Electrotechnical Commission, ISO – International Standards Organization, 
-            formerly known as Underwriters Laboratories.
-      "></gsheet-vue-widget>
-  <script src=js/app.b32a1a23.js> </script> </body> </html>
+        </a>
+        , and
+        <a
+          href="#"
+          class="tooltip-a"
+        >Supplementary standards
+          <span class="tooltiptext tooltip-a-center">
+            Supplementary standards support the main system safety standards for refrigeration, air-conditioning and heat-pump systems and appliances, for example, standards for refrigerant classification or standards for hazardous areas
+          </span>
+        </a>.
+      </p>
+
+      <p>
+        To refine your search results, use more than one filter.
+      </p>
+      <p>
+        Scroll down or click <a href="#bottom">here</a> to see abbreviations and standards organizations
+      </p>
+      ' footer-links-standards-organizations='
+      <a
+        target="_blank"
+        href="https://www.iso.org"
+      ><sup>1</sup>https://www.iso.org;
+      </a>
+      <a
+        target="_blank"
+        href="https://www.iec.ch/"
+      >https://www.iec.ch/;
+      </a>
+      <a
+        target="_blank"
+        href="https://www.cencenelec.eu/Pages/default.aspx"
+      >https://www.cencenelec.eu/Pages/default.aspx;
+      </a>
+      <a
+        target="_blank"
+        href="https://www.ul.com/"
+      >https://www.ul.com/;
+      </a>
+      <a
+        target="_blank"
+        href="https://www.ansi.org/"
+      >https://www.ansi.org/;
+      </a>
+      <a
+        target="_blank"
+        href="https://www.ashrae.org/;"
+      >https://www.ashrae.org/;
+      </a>
+      <a
+        target="_blank"
+        href="http://www.chinacsrmap.org/"
+      >http://www.chinacsrmap.org/
+      </a>
+    ' footnote-abbreviations="
+      <i>Abbreviations</i>: AHSRAE - American Society of Heating, Refrigerating and Air-Conditioning Engineers, 
+      ANSI – American National Standards Institute, EU – European Union, IEC – International Electrotechnical Commission, 
+      EN – European Standard, IEC - International Electrotechnical Commission, ISO – International Standards Organization, 
+        formerly known as Underwriters Laboratories.
+  ">
+  </gsheet-vue-widget>
+  <script src=js/app.c561e6ae.js></script>
+</body>
+</html>
