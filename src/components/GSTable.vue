@@ -1,9 +1,7 @@
 <template>
   <div id="table-gsheet">
-
     <!-- Filters -->
     <b-container fluid v-if="items && items.length > 0">
-
       <!-- User Interface controls -->
       <b-row>
         <b-col md="8" class="my-1">
@@ -25,38 +23,52 @@
             @click="onResetFilters"
             variant="outline-primary"
             class="mb-0"
-          >Reset filters
-          </b-button>
+          >Reset filters</b-button>
           <b-button
             size="md"
             style="float: right;"
             @click="onResetSort"
             variant="outline-primary"
             class="mb-0"
-          >Reset order
-          </b-button>
+          >Reset order</b-button>
         </b-col>
       </b-row>
 
       <b-row>
-        
-        <b-col v-for="filter in orderedUserFilters" md="3" class="my-1" :key="Object.keys(filter)[0]">
+        <b-col
+          v-for="filter in orderedUserFilters"
+          md="3"
+          class="my-1"
+          :key="Object.keys(filter)[0]"
+        >
           <b-form-group horizontal :label="Object.keys(filter)[0].toUpperCase()" class="mb-0">
             <b-form-select v-model="userFilters[Object.keys(filter)[0]].selected">
               <option :value="null" selected>Any ...</option>
-              <option v-for="item in filteredLabels[Object.keys(filter)[0]]" :value="item" :key="item">{{item}}</option>
+              <option
+                v-for="item in filteredLabels[Object.keys(filter)[0]]"
+                :value="item"
+                :key="item"
+              >{{item}}</option>
             </b-form-select>
           </b-form-group>
         </b-col>
-
       </b-row>
 
       <div class="panel panel-default" :class="{'panel-fullscreen': fullscreen}">
         <div class="panel-heading">
           <ul class="list-inline panel-actions">
             <li>
-              <a href="#" id="panel-fullscreen" role="button" title="Toggle fullscreen" @click.stop="() => {fullscreen = !fullscreen}">
-                <i class="fas" :class="{'fa-compress-arrows-alt': fullscreen, 'fa-arrows-alt': !fullscreen}"></i>
+              <a
+                href="#"
+                id="panel-fullscreen"
+                role="button"
+                title="Toggle fullscreen"
+                @click.stop="() => {fullscreen = !fullscreen}"
+              >
+                <i
+                  class="fas"
+                  :class="{'fa-compress-arrows-alt': fullscreen, 'fa-arrows-alt': !fullscreen}"
+                ></i>
               </a>
             </li>
           </ul>
@@ -87,19 +99,14 @@
               <span v-html="data.value"></span>
             </template>
 
-            <template
-              v-for="label in labelNames"
-              :slot="label.name" slot-scope="row">
+            <template v-for="label in labelNames" :slot="label.name" slot-scope="row">
               <b-badge
                 href="#"
                 v-for="(value, key) in row.item[label.name]"
                 @click="onFilterByLabel(row.item, label.name, value)"
                 :variant="label.variant"
-              >
-                {{ value }}
-              </b-badge>
+              >{{ value }}</b-badge>
             </template>
-
           </b-table>
 
           <b-row>
@@ -118,42 +125,43 @@
 
             <b-col md="3" class="my-1">
               <b-input-group prepend="Page size">
-                <b-form-select class="mb-2 mr-sm-2 mb-sm-0" :options="pageOptions" v-model="perPage"></b-form-select>
+                <b-form-select
+                  class="mb-2 mr-sm-2 mb-sm-0"
+                  :options="pageOptions"
+                  v-model="perPage"
+                ></b-form-select>
               </b-input-group>
             </b-col>
 
-            <div class="footer-links" v-html="footnoteAbbreviations">
-            </div>
-            <div id="bottom" class="footer-links" v-html="footerLinksStandardsOrganizations">
-            </div>
+            <div class="footer-links" v-html="footnoteAbbreviations"></div>
+            <div id="bottom" class="footer-links" v-html="footerLinksStandardsOrganizations"></div>
           </b-row>
         </div>
       </div>
     </b-container>
   </div>
-
 </template>
 
 <script>
-import TabelTop from '../lib/tableTop';
-import debounce from 'lodash.debounce';
+import TabelTop from "../lib/tableTop";
+import debounce from "lodash.debounce";
 
 let browserSizeRange = window.innerWidth;
 
 export default {
-  name: 'GSTable',
+  name: "GSTable",
   props: [
-    'title',
-    'spreadsheetUrl',
-    'spreadsheetUrlExport',
-    'numberOfSortableColumns',
-    'invisibleColumns',
-    'footerLinksStandardsOrganizations',
-    'footnoteAbbreviations',
-    'columnsWithFooters',
-    'columnsFooters',
-    'filterColumns',
-    'labelsVariant'
+    "title",
+    "spreadsheetUrl",
+    "spreadsheetUrlExport",
+    "numberOfSortableColumns",
+    "invisibleColumns",
+    "footerLinksStandardsOrganizations",
+    "footnoteAbbreviations",
+    "columnsWithFooters",
+    "columnsFooters",
+    "filterColumns",
+    "labelsVariant"
   ],
   data() {
     return {
@@ -168,22 +176,22 @@ export default {
       pageOptions: [50, 100, 150],
       filter: null,
       sortBy: null,
-      fullscreen: false,
+      fullscreen: false
     };
   },
   computed: {
     /**
-    * Filtered list of items by applying each filter on the previous filtering
-    * {Object[]} this.items - array containing all rows
-    * {string} this.items['Standard'] - value
-    * {Object} this.userFilters - all filters as properties, with the selected value, on each property.
-    * {string} this.userFilters['Type'] - type value.
-    * @returns {Array} with the same structure as items, but as a copy and filtered
-    */
+     * Filtered list of items by applying each filter on the previous filtering
+     * {Object[]} this.items - array containing all rows
+     * {string} this.items['Standard'] - value
+     * {Object} this.userFilters - all filters as properties, with the selected value, on each property.
+     * {string} this.userFilters['Type'] - type value.
+     * @returns {Array} with the same structure as items, but as a copy and filtered
+     */
     filteredItems: function filterItems() {
       let result = this.items.slice();
 
-      Object.keys(this.userFilters).map((filterName) => {
+      Object.keys(this.userFilters).map(filterName => {
         const selectedFilterValue = this.userFilters[filterName].selected;
         // for each filter, will filter only those containing the value selected
         result = selectedFilterValue
@@ -191,7 +199,7 @@ export default {
               return item[filterName].indexOf(selectedFilterValue) > -1;
             })
           : result.slice();
-      })
+      });
 
       return result;
     },
@@ -201,18 +209,24 @@ export default {
     filteredLabels: function filterLabels() {
       let result = {};
 
-      this.filteredItems.map(item => { // search in all filtered items
-        Object.keys(this.userFilters).map((filterName) => { // search in all filters
+      this.filteredItems.map(item => {
+        // search in all filtered items
+        Object.keys(this.userFilters).map(filterName => {
+          // search in all filters
           const filter = this.userFilters[filterName];
 
-          filter.values.map((option) => { // search in all options of a filter
+          filter.values.map(option => {
+            // search in all options of a filter
             // option is found but the result either has not yet added the filter or the option has not been pushed in
-            if(item[filterName].indexOf(option) > -1 && (!result[filterName] || result[filterName].indexOf(option) === -1)) {
-              !result[filterName] ? result[filterName] = [] : null
+            if (
+              item[filterName].indexOf(option) > -1 &&
+              (!result[filterName] || result[filterName].indexOf(option) === -1)
+            ) {
+              !result[filterName] ? (result[filterName] = []) : null;
               result[filterName].push(option);
             }
-          })
-        })
+          });
+        });
       });
 
       return result;
@@ -223,8 +237,8 @@ export default {
     orderedUserFilters: function orderedUserFilters() {
       let result = [];
 
-      const userFilters = this.filterColumns.split(', ');
-      userFilters.map((filterName) => {
+      const userFilters = this.filterColumns.split(", ");
+      userFilters.map(filterName => {
         let temp = {};
         temp[filterName] = this.userFilters[filterName];
         this.userFilters[filterName] ? result.push(temp) : null;
@@ -248,24 +262,26 @@ export default {
      * will remove the tooltip from label if is rendered for mobile (<580px)
      */
     adjustFootnotesForResolution() {
-      window.addEventListener('resize', debounce(() => {
-        console.log('resized!');
-        const temp = this.headers.slice();
+      window.addEventListener(
+        "resize",
+        debounce(() => {
+          const temp = this.headers.slice();
 
-        if(window.innerWidth < 580 && browserSizeRange > 580) {
-          temp.map((header) => {
-            header.label = header.displayName;
-          });
-          browserSizeRange = window.innerWidth;
-          this.headers = temp.slice();
-        } else if (window.innerWidth > 580 && browserSizeRange < 580) {
-          temp.map((header) => {
-            header.label = header.labelWithFootnote;
-          });
-          browserSizeRange = window.innerWidth;
-          this.headers = temp.slice();
-        }
-      }, 1000));
+          if (window.innerWidth < 580 && browserSizeRange > 580) {
+            temp.map(header => {
+              header.label = header.displayName;
+            });
+            browserSizeRange = window.innerWidth;
+            this.headers = temp.slice();
+          } else if (window.innerWidth > 580 && browserSizeRange < 580) {
+            temp.map(header => {
+              header.label = header.labelWithFootnote;
+            });
+            browserSizeRange = window.innerWidth;
+            this.headers = temp.slice();
+          }
+        }, 1000)
+      );
     },
     /**
      * maked the headers, the labels and the items (rows)
@@ -284,18 +300,22 @@ export default {
       this.labels = this.formatLabels(data.columnNamesList);
       this.items = this.formatValues(data.columnNamesList, data.elements);
       this.totalRows = this.items.length;
-      const userFilterNames = this.filterColumns.split(', ');
+      const userFilterNames = this.filterColumns.split(", ");
       const labelFilters = makeLabelFiltersList(this.labels, userFilterNames);
-      const nonLabelFilters = makeNonLabelFiltersList.call(this, this.labels, userFilterNames);
+      const nonLabelFilters = makeNonLabelFiltersList.call(
+        this,
+        this.labels,
+        userFilterNames
+      );
 
       this.userFilters = Object.assign(labelFilters, nonLabelFilters);
 
       function makeLabelFiltersList(labels, filterNames) {
         let result = {};
 
-        filterNames.map((filterName) => {
-          if(labels[filterName]) {
-            result[filterName] = {selected: null, values: []};
+        filterNames.map(filterName => {
+          if (labels[filterName]) {
+            result[filterName] = { selected: null, values: [] };
             result[filterName].values = labels[filterName].slice();
           }
         });
@@ -305,10 +325,14 @@ export default {
       function makeNonLabelFiltersList(labels, filterNames) {
         let result = {};
 
-        filterNames.map((filterName) => {
-          if(!labels[filterName]) {
-            result[filterName] = {selected: null, values: []};
-            result[filterName].values = this.formatStandardTypes(data.columnNamesList, data.elements, filterName);
+        filterNames.map(filterName => {
+          if (!labels[filterName]) {
+            result[filterName] = { selected: null, values: [] };
+            result[filterName].values = this.formatStandardTypes(
+              data.columnNamesList,
+              data.elements,
+              filterName
+            );
           }
         });
 
@@ -329,10 +353,10 @@ export default {
       let result = [];
       let index = 0;
       let footerIndicatorsIndex = 0;
-      let invisibleColumnsList = this.invisibleColumns.split(', ');
+      let invisibleColumnsList = this.invisibleColumns.split(", ");
 
       columns.map(header => {
-        if(invisibleColumnsList.indexOf(header.name) === -1) {
+        if (invisibleColumnsList.indexOf(header.name) === -1) {
           const labelWithFootnote = addFooterIndication.call(this, header.name);
           let item = {
             key: header.name,
@@ -340,7 +364,7 @@ export default {
             labelWithFootnote,
             displayName: header.name,
             sortable: index < this.numberOfSortableColumns ? true : false,
-            sortDirection: "desc",
+            sortDirection: "desc"
           };
           result.push(item);
           index++;
@@ -350,15 +374,17 @@ export default {
 
       function addFooterIndication(item) {
         let result = item;
-        let columnsWithFootersList = this.columnsWithFooters.split(', ');
-        let columnsFootersList = this.columnsFooters.split('</span>');
+        let columnsWithFootersList = this.columnsWithFooters.split(", ");
+        let columnsFootersList = this.columnsFooters.split("</span>");
 
-        if(columnsWithFootersList.indexOf(item) > -1) {
+        if (columnsWithFootersList.indexOf(item) > -1) {
           const footerNote = columnsFootersList.find(function(element) {
             return element.indexOf(`id="${item}"`) > -1;
           });
           result = ` ${item}
-          <p class="tooltip-a"><sup> ${footerIndicators[footerIndicatorsIndex]}</sup>
+          <p class="tooltip-a"><sup> ${
+            footerIndicators[footerIndicatorsIndex]
+          }</sup>
             ${footerNote}</span>
           </p>
           `;
@@ -377,14 +403,14 @@ export default {
      */
     formatLabels(columns) {
       let result = {};
-      const labesWithVariant = this.labelsVariant.split(', ');
+      const labesWithVariant = this.labelsVariant.split(", ");
       let labesWithVariantObj = {};
 
-      labesWithVariant.map((item) => {
-        const labelName = item.split(':')[0];
-        const labelVariant = item.split(':')[1];
+      labesWithVariant.map(item => {
+        const labelName = item.split(":")[0];
+        const labelVariant = item.split(":")[1];
         labesWithVariantObj[labelName] = labelVariant;
-      })
+      });
 
       columns.map(header => {
         header.subHeaders ? (result[header.name] = []) : null;
@@ -393,7 +419,10 @@ export default {
             let subHeaderName = header.subHeaders[key];
             result[header.name].push(subHeaderName);
           });
-          this.labelNames.push({name: header.name, variant: labesWithVariantObj[header.name] || 'primary'});
+          this.labelNames.push({
+            name: header.name,
+            variant: labesWithVariantObj[header.name] || "primary"
+          });
         }
       });
 
@@ -430,19 +459,19 @@ export default {
     checkForHyperLinks(items) {
       let result = items.slice();
 
-      result.map((row) => {
-        Object.keys(row).map((key) => {
-          const element = row[`${key}-links`] ?
-            replaceLink(row[key], row[`${key}-links`]) :
-            row[key];
+      result.map(row => {
+        Object.keys(row).map(key => {
+          const element = row[`${key}-links`]
+            ? replaceLink(row[key], row[`${key}-links`])
+            : row[key];
           row[key] = element;
-        })
-      })
+        });
+      });
 
       return result;
 
       function replaceLink(textToBeHyperLinked, textWithLink) {
-        let link = textWithLink.split('>')[1].split('<')[0];
+        let link = textWithLink.split(">")[1].split("<")[0];
         let resultTemp = textWithLink.replace(link, textToBeHyperLinked);
         resultTemp = resultTemp.replace(link, textToBeHyperLinked);
         const result = resultTemp.replace(textToBeHyperLinked, link);
@@ -475,10 +504,12 @@ export default {
       this.currentPage = 1;
     },
     onFilterByLabel(item, labelName, value) {
-      this.userFilters[labelName] ? this.userFilters[labelName].selected = value : null;
+      this.userFilters[labelName]
+        ? (this.userFilters[labelName].selected = value)
+        : null;
     },
     onResetFilters() {
-      Object.keys(this.userFilters).map((filterName) => {
+      Object.keys(this.userFilters).map(filterName => {
         let filter = this.userFilters[filterName];
         filter.selected = null;
       });
