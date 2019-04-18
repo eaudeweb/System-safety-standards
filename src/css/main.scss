@@ -147,6 +147,9 @@ a.badge-success:hover, a.badge-success:focus {
   color: #fff;
   background-color: #1d8d7f;
 }
+td:first-child {
+	min-width: 150px;
+}
 
 // full screen
 .panel {
