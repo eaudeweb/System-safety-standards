@@ -283,11 +283,6 @@ table td:first-of-type * {
 
 .responsive-table {
   overflow: auto;
-  > table {
-    @media (min-width: 768px) {
-      min-width: 1200px;
-    }
-  }
 }
 
 .filter-button {

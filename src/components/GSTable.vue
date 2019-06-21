@@ -272,7 +272,7 @@ export default {
   methods: {
     /**
      * will remake the labels to show tooltip only for desktop table
-     * will remove the tooltip from label if is rendered for mobile (<580px)
+     * will remove the tooltip from label if is rendered for mobile (<768px)
      */
     adjustFootnotesForResolution() {
       window.addEventListener(
@@ -280,13 +280,13 @@ export default {
         debounce(() => {
           const temp = this.headers.slice();
 
-          if (window.innerWidth < 580 && browserSizeRange > 580) {
+          if (window.innerWidth <= 768 && browserSizeRange >= 768) {
             temp.map(header => {
               header.label = header.displayName;
             });
             browserSizeRange = window.innerWidth;
             this.headers = temp.slice();
-          } else if (window.innerWidth > 580 && browserSizeRange < 580) {
+          } else if (window.innerWidth > 768 && browserSizeRange < 768) {
             temp.map(header => {
               header.label = header.labelWithFootnote;
             });
@@ -373,7 +373,7 @@ export default {
           const labelWithFootnote = addFooterIndication.call(this, header.name);
           let item = {
             key: header.name,
-            label: window.innerWidth > 580 ? labelWithFootnote : header.name,
+            label: window.innerWidth > 768 ? labelWithFootnote : header.name,
             labelWithFootnote,
             displayName: header.name,
             sortable: index < this.numberOfSortableColumns ? true : false,
