@@ -1,17 +1,17 @@
 <template>
   <div class="container-fluid" v-cloak>
     <div class="row flex-xl-nowrap2">
-      <div class="bd-content">
+      <div class="bd-content col-auto">
         <header>
           <h1>{{title}}
-          </h1>          
+          </h1>
         </header>
 
         <div class="p-container" v-html="txt">
         </div>
 
         <!-- Table -->
-        <gs-table 
+        <gs-table
           :spreadsheet-url="spreadsheetUrl"
           :spreadsheet-url-export="spreadsheetUrlExport"
           :number-of-sortable-columns="numberOfSortableColumns"
@@ -23,7 +23,7 @@
           :filter-columns="filterColumns"
           :labels-variant="labelsVariant"
         ></gs-table>
-        
+
       </div>
     </div>
   </div>

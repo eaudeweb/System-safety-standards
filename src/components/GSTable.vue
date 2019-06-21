@@ -4,32 +4,29 @@
     <b-container fluid v-if="items && items.length > 0">
       <!-- User Interface controls -->
       <b-row>
-        <b-col md="8" class="my-1">
+        <b-col class="my-1 search-group-wrapper">
           <b-input-group prepend="Search">
             <b-form-input v-model="filter" placeholder="Search by key word, year, etc"></b-form-input>
           </b-input-group>
         </b-col>
 
-        <b-col md="4" class="my-1">
+        <b-col class="my-1 d-flex col-auto flex-wrap flex-sm-nowrap flex-column flex-sm-row">
           <a
-            class="btn mb-0 btn-outline-primary btn-md"
-            style="float: right;"
+            class="btn mb-0 btn-outline-primary btn-md filter-button"
             target="_blank"
             :href="spreadsheetUrlExport"
           >Export and Print</a>
           <b-button
             size="md"
-            style="float: right;"
             @click="onResetFilters"
             variant="outline-primary"
-            class="mb-0"
+            class="mb-0 ml-sm-2 mt-2 mt-sm-0 filter-button"
           >Reset filters</b-button>
           <b-button
             size="md"
-            style="float: right;"
             @click="onResetSort"
             variant="outline-primary"
-            class="mb-0"
+            class="mb-0 ml-sm-2 mt-2 mt-sm-0 filter-button"
           >Reset order</b-button>
         </b-col>
       </b-row>
@@ -37,11 +34,16 @@
       <b-row>
         <b-col
           v-for="filter in orderedUserFilters"
-          md="3"
+          md="auto"
           class="my-1"
           :key="Object.keys(filter)[0]"
         >
-          <b-form-group horizontal :label="Object.keys(filter)[0].toUpperCase()" class="mb-0">
+          <b-form-group
+            horizontal
+            :label="Object.keys(filter)[0].toUpperCase()"
+            :label-cols="4"
+            class="mb-0"
+          >
             <b-form-select v-model="userFilters[Object.keys(filter)[0]].selected">
               <option :value="null" selected>Any ...</option>
               <option
@@ -53,7 +55,7 @@
           </b-form-group>
         </b-col>
       </b-row>
-
+      <!-- Fullscreen -->
       <div class="panel panel-default" :class="{'panel-fullscreen': fullscreen}">
         <div class="panel-heading">
           <ul class="list-inline panel-actions">
@@ -75,41 +77,52 @@
         </div>
 
         <div class="panel-body">
-          <!-- Main table element -->
-          <b-table
-            ref="vuetable"
-            responsive
-            striped
-            hover
-            show-empty
-            stacked="sm"
-            :items="filteredItems"
-            :fields="headers"
-            :current-page="currentPage"
-            :per-page="perPage"
-            :filter="filter"
-            @filtered="onFiltered"
-            :sort-by.sync="sortBy"
-          >
-            <template
-              v-for="header in headers.slice(0, headers.length - 2)"
-              :slot="header.displayName"
-              slot-scope="data"
+          <div class="responsive-table">
+            <!-- Main table element -->
+            <b-table
+              ref="vuetable"
+              responsive
+              striped
+              hover
+              show-empty
+              stacked="md"
+              :items="filteredItems"
+              :fields="headers"
+              :current-page="currentPage"
+              :per-page="perPage"
+              :filter="filter"
+              @filtered="onFiltered"
+              :sort-by.sync="sortBy"
             >
-              <span v-html="data.value"></span>
-            </template>
-
-            <template v-for="label in labelNames" :slot="label.name" slot-scope="row">
-              <b-badge
-                href="#"
-                v-for="(value, key) in row.item[label.name]"
-                @click="onFilterByLabel(row.item, label.name, value)"
-                :variant="label.variant"
-              >{{ value }}</b-badge>
-            </template>
-          </b-table>
-
-          <b-row>
+              <!-- All columns except labels (last two) will show the content as v-html (ex: hyperlinks) even if the content is plain text (basic tds)-->
+              <template
+                v-for="header in headers.slice(0, headers.length - labelNames.length)"
+                :slot="header.displayName"
+                slot-scope="data"
+              >
+                <span
+                  v-html="data.value"
+                  :key="header.label"
+                ></span>
+              </template>
+              <!-- Label columns -->
+              <template
+                v-for="label in labelNames"
+                :slot="label.name"
+                slot-scope="row"
+              >
+                <b-badge
+                  href="#"
+                  v-for="(value, key) in row.item[label.name]"
+                  @click="onFilterByLabel(row.item, label.name, value)"
+                  :variant="label.variant"
+                  :key="key"
+                >{{ value }}</b-badge>
+              </template>
+            </b-table>
+          </div>
+          <!-- Table pagination -->
+          <b-row class="m-0">
             <b-col md="3" class="my-1">
               <label class="mr-sm-2">Total results {{totalRows}}</label>
             </b-col>
@@ -126,13 +139,13 @@
             <b-col md="3" class="my-1">
               <b-input-group prepend="Page size">
                 <b-form-select
-                  class="mb-2 mr-sm-2 mb-sm-0"
+                  class="mr-sm-2"
                   :options="pageOptions"
                   v-model="perPage"
                 ></b-form-select>
               </b-input-group>
             </b-col>
-
+            <!-- Footnotes -->
             <div class="footer-links" v-html="footnoteAbbreviations"></div>
             <div id="bottom" class="footer-links" v-html="footerLinksStandardsOrganizations"></div>
           </b-row>
@@ -286,7 +299,7 @@ export default {
     /**
      * maked the headers, the labels and the items (rows)
      * {Array} this.headers - the headers used by the table
-     * {Object} this.labels - only the columns that have sub columns, these will be treated as labels (loloured badges)
+     * {Object} this.labels - only the columns that have sub columns, these will be treated as labels (coloured badges)
      * {Array} this.items - all the items
      * {Object} this.items - certain values found for each header
      * {string | Array} this.items[headerName] - value in cell, or labels that apply to it
@@ -398,20 +411,19 @@ export default {
      * {Array} this.labelNames - array of labelNames
      * {string} this.labelNames.name - name of label
      * {string} this.labelNames - variant if provided by the user or default to 'primary'
-     * @returns {Object} this.labels - only the columns that have sub columns, these will be treated as labels (loloured badges)
+     * @returns {Object} this.labels - only the columns that have sub columns, these will be treated as labels (coloured badges)
      * @returns {Array} this.labels['Life cycle stages'] - all subheaders from google sheet found by the api
      */
     formatLabels(columns) {
       let result = {};
-      const labesWithVariant = this.labelsVariant.split(", ");
-      let labesWithVariantObj = {};
+      const labelsWithVariant = this.labelsVariant.split(", ");
+      let labelsWithVariantObj = {};
 
-      labesWithVariant.map(item => {
+      labelsWithVariant.map(item => {
         const labelName = item.split(":")[0];
         const labelVariant = item.split(":")[1];
-        labesWithVariantObj[labelName] = labelVariant;
+        labelsWithVariantObj[labelName] = labelVariant;
       });
-
       columns.map(header => {
         header.subHeaders ? (result[header.name] = []) : null;
         if (header.subHeaders) {
@@ -421,7 +433,7 @@ export default {
           });
           this.labelNames.push({
             name: header.name,
-            variant: labesWithVariantObj[header.name] || "primary"
+            variant: labelsWithVariantObj[header.name] || "primary"
           });
         }
       });
